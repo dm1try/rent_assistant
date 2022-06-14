@@ -9,6 +9,15 @@
 # move said applications out of the umbrella.
 import Config
 
+config :catalog, Catalog.Repo,
+  database: "catalog_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost"
+
+config :catalog,
+    ecto_repos: [Catalog.Repo]
+
 # Sample configuration:
 #
 #     config :logger, :console,
