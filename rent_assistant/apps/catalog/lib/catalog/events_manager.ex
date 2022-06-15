@@ -1,8 +1,19 @@
 defmodule Catalog.EventsManager do
   @channel_name "events"
+  @default_name CatalogEventsManager
+
+  def child_spec(opts) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      type: :worker,
+      restart: :permanent,
+      shutdown: 500
+    }
+  end
 
   def start_link(args) do
-    name = Keyword.get(args, :name, CatalogEventsManager)
+    name = Keyword.get(args, :name, @default_name)
 
     {:ok, _} =
       Registry.start_link(
@@ -11,7 +22,7 @@ defmodule Catalog.EventsManager do
       )
   end
 
-  def subscribe(manager) do
+  def subscribe(manager \\ @default_name) do
     {:ok, _} = Registry.register(manager, @channel_name, [])
   end
 
