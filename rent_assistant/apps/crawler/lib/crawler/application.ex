@@ -9,7 +9,9 @@ defmodule Crawler.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Crawler.Worker.start_link(arg)
-      # {Crawler.Worker, arg}
+      {Crawler.Inspector,
+       parser: Crawler.Sources.Olx.Parser,
+       index_page_url: "https://www.olx.pl/d/nieruchomosci/mieszkania/wynajem/krakow/"}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
