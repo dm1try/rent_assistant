@@ -12,6 +12,9 @@ import Config
 config :catalog,
   ecto_repos: [Catalog.Repo]
 
+config :tg_bot,
+  ecto_repos: [TgBot.Repo]
+
 import_config "#{Mix.env()}.exs"
 
 # Sample configuration:
