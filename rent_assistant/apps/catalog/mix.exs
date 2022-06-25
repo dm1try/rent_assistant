@@ -27,7 +27,8 @@ defmodule Catalog.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.7.2"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:timex, "~> 3.7.8"}
     ]
   end
 end
