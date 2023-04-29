@@ -1,49 +1,36 @@
+GIT
+  remote: https://github.com/mina-deploy/mina.git
+  revision: f638fade466d3fbb9bf1331880c6bea756706e9a
+  branch: master
+  specs:
+    mina (1.2.4)
+      rake
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activerecord (7.0.4.3)
-      activemodel (= 7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activesupport (7.0.4.3)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 1.6, < 2)
-      minitest (>= 5.1)
-      tzinfo (~> 2.0)
-    concurrent-ruby (1.2.2)
-    dotenv (2.8.1)
-    et-orbi (1.2.7)
-      tzinfo
-    fugit (1.8.1)
-      et-orbi (~> 1, >= 1.2.7)
-      raabro (~> 1.4)
-    httparty (0.21.0)
-      mini_mime (>= 1.0.0)
-      multi_xml (>= 0.5.2)
-    i18n (1.12.0)
-      concurrent-ruby (~> 1.0)
-    mini_mime (1.1.2)
-    minitest (5.18.0)
-    multi_xml (0.6.0)
-    pg (1.4.6)
-    raabro (1.4.0)
+    diff-lcs (1.5.0)
     rake (13.0.6)
-    rufus-scheduler (3.8.2)
-      fugit (~> 1.1, >= 1.1.6)
-    tzinfo (2.0.6)
-      concurrent-ruby (~> 1.0)
+    rspec (3.12.0)
+      rspec-core (~> 3.12.0)
+      rspec-expectations (~> 3.12.0)
+      rspec-mocks (~> 3.12.0)
+    rspec-core (3.12.2)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.0)
 
 PLATFORMS
   x86_64-darwin-22
 
 DEPENDENCIES
-  activerecord
-  dotenv
-  httparty
-  pg
-  rake
-  rufus-scheduler
+  mina (~> 1.2)!
+  rspec (> 3.10)
 
 BUNDLED WITH
    2.4.10
