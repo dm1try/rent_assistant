@@ -10,9 +10,9 @@ Sequel.migration do
       String :address, null: false
       String :url, null: false
       String :currency, null: false
-      column :location, 'float[]', null: false
-      column :images, 'text[]'
-      column :source, 'jsonb'
+      String :location, text: true, null: false # JSON
+      String :images, text: true # JSON
+      String :source, text: true # JSON
       Time :created_at, null: false
       Time :updated_at, null: false
     end

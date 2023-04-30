@@ -11,7 +11,6 @@ $logger.level = Logger::INFO
 require "sequel"
 begin
   DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
-  DB.extension :pg_array
 rescue
   $logger.warn "Could not connect to database: #{ENV["DATABASE_URL"]}"
 end
