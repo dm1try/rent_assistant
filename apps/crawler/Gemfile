@@ -7,3 +7,9 @@ group :development, :test do
 end
 
 gem "rspec", "~> 3.12", :group => :test
+
+gem "nokogiri", "~> 1.14"
+
+gem "vcr", "~> 6.1", :group => :test
+
+gem "webmock", "~> 3.18", :group => :test

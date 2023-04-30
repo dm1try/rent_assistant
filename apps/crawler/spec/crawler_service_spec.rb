@@ -4,16 +4,16 @@ require 'crawler_service'
 RSpec.describe CrawlerService do
   let(:crawler_service) { CrawlerService.new }
 
-  context 'with working catalog service' do
-    let(:catalog) { double('catalog', save_listing: true) }
-
-    before do
-      allow(DRbObject).to receive(:new_with_uri).and_return(catalog)
+  describe '#start_crawling' do
+    it 'starts crawling' do
+      expect(crawler_service.start_crawling).to be_a(Thread)
     end
 
-    it "saves listing using catalog" do
-      crawler_service.crawl
-      expect(catalog).to have_received(:save_listing)
+    it 'logs crawling' do
+      expect($logger).to receive(:info).with("Crawling...")
+      expect($logger).to receive(:info).with("Crawling done, sleeping...")
+      crawler_service.start_crawling
+      sleep 1
     end
   end
 end
