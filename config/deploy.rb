@@ -35,6 +35,7 @@ end
 # All paths in `shared_dirs` and `shared_paths` will be created on their own.
 task :setup do
   command %(mkdir -p "#{fetch(:shared_path)}/config")
+  command %(mkdir -p "#{fetch(:shared_path)}/data")
 end
 
 desc 'Deploys the current version to the server.'
