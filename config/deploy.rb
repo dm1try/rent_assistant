@@ -3,6 +3,7 @@
 require 'mina/git'
 require 'mina/deploy'
 require 'mina/bundler'
+require 'mina/rbenv'
 
 set :application_name, 'rent_assistant'
 set :domain, ENV['DOMAIN']
@@ -10,6 +11,8 @@ set :deploy_to, '/home/deploy/app'
 set :repository, 'https://github.com/dm1try/rent_assistant.git'
 set :branch, ENV['BRANCH'] || 'main'
 set :execution_mode, :system
+set :rbenv_path, '/home/deploy/.rbenv'
+set :rbenv_ruby, '3.2.2'
 
 # Optional settings:
 set :user, 'deploy'          # Username in the server to SSH to.
@@ -25,13 +28,13 @@ set :user, 'deploy'          # Username in the server to SSH to.
 # This task is the environment that is loaded for all remote run commands, such as
 # `mina deploy` or `mina rake`.
 task :remote_environment do
+  invoke :'rbenv:load'
 end
 
 # Put any custom commands you need to run at setup
 # All paths in `shared_dirs` and `shared_paths` will be created on their own.
 task :setup do
-  command %{sudo snap install ruby --classic}
-  command %{sudo apt install ruby-foreman}
+  #command %(mkdir -p "#{fetch(:shared_path)}/config")
 end
 
 desc 'Deploys the current version to the server.'
