@@ -46,7 +46,8 @@ task :deploy do
     # instance of your project.
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
-    #invoke :'bundle:install'
+    command %(cd apps/catalog && bundle config set without development test && bundle install && cd ../..)
+    command %(cd apps/crawler && bundle config set without development test && bundle install && cd ../..)
     invoke :'deploy:cleanup'
 
     on :launch do
