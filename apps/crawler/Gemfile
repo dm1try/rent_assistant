@@ -5,3 +5,5 @@ source "https://rubygems.org"
 group :development, :test do
   gem "rerun"
 end
+
+gem "rspec", "~> 3.12", :group => :test
