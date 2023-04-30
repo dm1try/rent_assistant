@@ -21,4 +21,8 @@ class CatalogService
       listing
     end
   end
+
+  def listing_exists?(url)
+    DB[:listings].where(url: url).count > 0
+  end
 end

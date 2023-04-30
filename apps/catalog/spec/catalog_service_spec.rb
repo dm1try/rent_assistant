@@ -53,4 +53,31 @@ RSpec.describe CatalogService do
       expect(observer).to have_received(:update).with(:new_listing, DB[:listings].first[:id], listing_attributes)
     end
   end
+
+  describe '#listing_exists?' do
+    let(:listing_attributes) do
+      {
+        city: "Listing title",
+        price: 99,
+        description: "test",
+        area: 99,
+        rooms: 99,
+        address: "test",
+        url: "test",
+        currency: "test",
+        location: [1, 2],
+        created_at: Time.now,
+        updated_at: Time.now
+      }
+    end
+
+    it 'returns true if the listing exists' do
+      catalog_service.save_listing(listing_attributes)
+      expect(catalog_service.listing_exists?(listing_attributes[:url])).to eq(true)
+    end
+
+    it 'returns false if the listing does not exist' do
+      expect(catalog_service.listing_exists?(999)).to eq(false)
+    end
+  end
 end
