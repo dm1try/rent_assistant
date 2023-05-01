@@ -14,6 +14,9 @@ class CrawlerService
   def watch(search_id:, city:, filters: {})
     Search.create(search_id, city, filters)
   end
+
+  def unwatch(search_id:)
+    Search.delete_by_search_id(search_id)
   end
 
   def crawl

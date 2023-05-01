@@ -9,6 +9,9 @@ class Search
   def self.create(search_id, city, filters)
     DB[:searches].insert(search_id: search_id, city: city, filters: JSON.dump(filters))
   end
+
+  def self.delete_by_search_id(search_id)
+    DB[:searches].where(search_id: search_id).delete
   end
 
   def self.percolate(listing)

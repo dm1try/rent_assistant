@@ -23,6 +23,13 @@ RSpec.describe CrawlerService do
     end
   end
 
+  describe '#unwatch' do
+    it 'deletes a search' do
+      Search.create('my_search', 'warszawa', {})
+      expect { crawler_service.unwatch(search_id: 'my_search') }.to change { DB[:searches].count }.by(-1)
+    end
+  end
+
   describe '#crawl' do
     let(:parser) { double('parser') }
     let(:listing) { { url: 'https://example.com', title: 'test' } }

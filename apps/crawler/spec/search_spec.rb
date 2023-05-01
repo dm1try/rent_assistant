@@ -4,11 +4,19 @@ require 'search'
 RSpec.describe Search do
   let(:city) { 'krakow' }
   let(:filters) { { price: {min: 5000, max: 6000} } }
+  let(:custom_id) { 'search' }
 
   describe '.create' do
     it 'saves the search' do
-      search_id = Search.create(city, filters)
+      search_id = Search.create(custom_id, city, filters)
       expect(search_id).to be_a(Integer)
+    end
+  end
+
+  describe '.delete_by_search_id' do
+    it 'deletes the search by its custom id' do
+      Search.create(custom_id, city, filters)
+      expect { Search.delete_by_search_id(custom_id) }.to change { DB[:searches].count }.by(-1)
     end
   end
 
@@ -33,7 +41,7 @@ RSpec.describe Search do
       }
 
       before do
-        Search.create(city, filters)
+        Search.create(custom_id, city, filters)
       end
 
       it 'returns matched searches' do
@@ -58,7 +66,7 @@ RSpec.describe Search do
       }
 
       before do
-        Search.create(city, {})
+        Search.create(custom_id, city, {})
       end
 
       it 'returns all searches' do
