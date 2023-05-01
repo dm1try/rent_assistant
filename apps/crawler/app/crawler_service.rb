@@ -30,7 +30,7 @@ class CrawlerService
         parser.parse_listing(listing).tap do |listing|
           @catalog.save_listing(listing)
           matched_search_ids = Search.percolate(listing)
-
+          $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
           if matched_search_ids.any?
             changed
             notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
@@ -46,8 +46,9 @@ class CrawlerService
         $logger&.info "Crawling..."
         crawl
 
-        $logger&.info "Crawling done, sleeping..."
-        sleep rand(10..30)
+        sleep_time = rand(10..30)
+        $logger&.info "Crawling done, sleeping for #{sleep_time} seconds..."
+        sleep sleep_time
       end
     end
   end
