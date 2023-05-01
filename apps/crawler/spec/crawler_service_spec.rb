@@ -24,6 +24,7 @@ RSpec.describe CrawlerService do
 
     it 'creates a parser' do
       expect { crawler_service.watch(search_id: 1, city: 'Warszawa', filters: []) }.to change { crawler_service.instance_variable_get(:@parsers).count }.by(1)
+      expect(crawler_service.instance_variable_get(:@parsers).first).to be_a(Parser)
     end
   end
 
