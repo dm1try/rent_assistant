@@ -6,6 +6,7 @@ $LOAD_PATH << File.expand_path("../../lib", __dir__)
 require 'logger'
 $logger = Logger.new(STDOUT)
 $logger.level = Logger::INFO
+$stdout.sync = true
 
 require "sequel"
 begin
