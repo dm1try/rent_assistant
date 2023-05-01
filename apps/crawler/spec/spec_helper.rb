@@ -13,6 +13,8 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'dotenv'
+Dotenv.load('.env.test')
 require_relative '../boot'
 require 'vcr'
 require 'webmock/rspec'
@@ -104,4 +106,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+  config.around(:each) do |example|
+    DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
+  end
 end
