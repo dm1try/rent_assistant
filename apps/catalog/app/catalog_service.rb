@@ -6,6 +6,8 @@ class CatalogService
 
   def save_listing(attributes)
     db_attributes = attributes.dup
+    db_attributes[:created_at] ||= Time.now
+    db_attributes[:updated_at] ||= Time.now
     db_attributes[:location] = JSON.dump(attributes[:location])
 
     listing_id = DB[:listings].insert(db_attributes)

@@ -16,9 +16,7 @@ RSpec.describe CatalogService do
       address: "test",
       url: "test",
       currency: "test",
-      location: [1, 2],
-      created_at: Time.now,
-      updated_at: Time.now
+      location: [1, 2]
     )
 
     expect(catalog_service.get_listings.count).to eq(1)
