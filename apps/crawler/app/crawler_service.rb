@@ -7,7 +7,6 @@ class CrawlerService
 
   def initialize
     @catalog = DRbObject.new_with_uri(ENV['CATALOG_DRB_URI'])
-    @parsers = []
   rescue DRb::DRbConnError => e
     $logger&.warn "Could not connect to catalog service: #{e}"
   end
@@ -17,7 +16,11 @@ class CrawlerService
   end
 
   def crawl
-    @parsers.each do |parser|
+    parsers = Search.active_cities.each_with_object([]) do |city, available_parsers|
+      available_parsers.concat(ParserFactory.new_for(city))
+    end
+
+    parsers.each do |parser|
       parser.parse_index.each do |listing|
         next if @catalog.listing_exists?(listing[:url])
         parser.parse_listing(listing).tap do |listing|

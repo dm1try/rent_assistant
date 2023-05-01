@@ -1,6 +1,11 @@
 require 'json'
 
 class Search
+
+  def self.active_cities
+    DB[:searches].select_map(:city).uniq
+  end
+
   def self.create(city, filters)
     DB[:searches].insert(city: city, filters: JSON.dump(filters))
   end

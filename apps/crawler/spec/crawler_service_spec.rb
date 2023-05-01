@@ -21,11 +21,6 @@ RSpec.describe CrawlerService do
     it 'creates a search' do
       expect { crawler_service.watch(search_id: 1, city: 'Warszawa', filters: []) }.to change { DB[:searches].count }.by(1)
     end
-
-    it 'creates a parser' do
-      expect { crawler_service.watch(search_id: 1, city: 'Warszawa', filters: []) }.to change { crawler_service.instance_variable_get(:@parsers).count }.by(1)
-      expect(crawler_service.instance_variable_get(:@parsers).first).to be_a(Parser)
-    end
   end
 
   describe '#crawl' do
@@ -34,7 +29,9 @@ RSpec.describe CrawlerService do
     let(:catalog) { double('catalog') }
 
     before do
-      crawler_service.instance_variable_set(:@parsers, [parser])
+      Search.create('warszawa', {})
+      allow(ParserFactory).to receive(:new_for).and_return([parser])
+      allow(parser).to receive(:parse_index).and_return([listing])
       crawler_service.instance_variable_set(:@catalog, catalog)
     end
 
