@@ -10,7 +10,7 @@ class DRbService
     with_retries do
       DRb.start_service(@uri, @service)
       $logger&.info("service started on #{@uri}")
-
+      yield(DRb.front) if block_given?
       DRb.thread.join
     end
   end
