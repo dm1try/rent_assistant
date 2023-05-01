@@ -49,7 +49,7 @@ RSpec.describe CrawlerService do
       expect(catalog).to receive(:save_listing).with(listing)
       expect(Search).to receive(:percolate).with(listing).and_return([1])
       expect(crawler_service).to receive(:changed)
-      expect(crawler_service).to receive(:notify_observers).with(:new_listing, listing: listing, matched_search_ids: [1])
+      expect(crawler_service).to receive(:notify_observers).with(:new_listing, {listing: listing, matched_search_ids: [1]})
 
       crawler_service.crawl
     end
@@ -61,7 +61,7 @@ RSpec.describe CrawlerService do
       expect(catalog).not_to receive(:save_listing).with(listing)
       expect(Search).not_to receive(:percolate).with(listing)
       expect(crawler_service).not_to receive(:changed)
-      expect(crawler_service).not_to receive(:notify_observers).with(:new_listing, listing: listing, matched_search_ids: [1])
+      expect(crawler_service).not_to receive(:notify_observers).with(:new_listing, {listing: listing, matched_search_ids: [1]})
 
       crawler_service.crawl
     end
