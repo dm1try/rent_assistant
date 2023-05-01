@@ -7,11 +7,11 @@ require 'logger'
 $logger = Logger.new(STDOUT)
 $logger.level = Logger::INFO
 
-# initialize the database connection
 require "sequel"
 begin
-  DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
+  database_url = ENV['CATALOG_DATABASE_URL'] || ENV['DATABASE_URL']
+  DB = Sequel.connect(database_url)
 rescue
-  $logger.warn "Could not connect to database: #{ENV["DATABASE_URL"]}"
+  $logger.warn "Could not connect to database: #{database_url}"
 end
 
