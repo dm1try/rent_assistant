@@ -38,7 +38,6 @@ class Olx < Parser
     if ad_data["id"]
       {
         url: ad_data["url"],
-        source: "olx",
         address: ad_data.dig("location", "pathName"),
         price: ad_data.dig("price", "regularPrice", "value"),
         area: dig_area(ad_data),
