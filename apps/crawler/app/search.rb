@@ -1,8 +1,8 @@
 require 'json'
 
 class Search
-  def self.create(filters)
-    DB[:searches].insert(filters: JSON.dump(filters))
+  def self.create(city, filters)
+    DB[:searches].insert(city: city, filters: JSON.dump(filters))
   end
 
   def self.percolate(listing)

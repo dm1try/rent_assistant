@@ -13,8 +13,7 @@ class CrawlerService
   end
 
   def watch(search_id:, city:, filters: [])
-    Search.create(filters: filters, city: city, search_id: search_id)
-    @parsers.concat(ParserFactory.new_for(city, filters))
+    Search.create(city, filters)
   end
 
   def crawl
