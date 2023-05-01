@@ -7,7 +7,7 @@ RSpec.describe CatalogService do
   it "works" do
     expect(catalog_service.get_listings.count).to eq(0)
 
-    catalog_service.save_listing(
+    result = catalog_service.save_listing(
       city: "Listing title",
       price: 99,
       description: "test",
@@ -20,8 +20,19 @@ RSpec.describe CatalogService do
     )
 
     expect(catalog_service.get_listings.count).to eq(1)
+    expect(result).to eq(DB[:listings].first[:id])
   end
 
+  context 'when listing attributes are invalid' do
+    it 'returns nil' do
+      expect(catalog_service.save_listing({})).to eq(nil)
+    end
+
+    it 'logs error' do
+      expect($logger).to receive(:error)
+      catalog_service.save_listing({})
+    end
+  end
   context 'when saving a listing' do
     let(:listing_attributes) do
       {

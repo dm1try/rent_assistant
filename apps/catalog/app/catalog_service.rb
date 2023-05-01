@@ -9,10 +9,16 @@ class CatalogService
     db_attributes[:created_at] ||= Time.now
     db_attributes[:updated_at] ||= Time.now
     db_attributes[:location] = JSON.dump(attributes[:location])
+    db_attributes[:source] = JSON.dump(attributes[:source]) if attributes[:source]
+    db_attributes[:images] = JSON.dump(attributes[:images]) if attributes[:images]
 
     listing_id = DB[:listings].insert(db_attributes)
     changed
     notify_observers(:new_listing, listing_id, attributes)
+    listing_id
+  rescue => e
+    $logger&.error "Could not save listing: #{e}"
+    nil
   end
 
   def get_listings
