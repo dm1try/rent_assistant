@@ -6,8 +6,9 @@ class Search
     DB[:searches].select_map(:city).uniq
   end
 
-  def self.create(city, filters)
-    DB[:searches].insert(city: city, filters: JSON.dump(filters))
+  def self.create(search_id, city, filters)
+    DB[:searches].insert(search_id: search_id, city: city, filters: JSON.dump(filters))
+  end
   end
 
   def self.percolate(listing)

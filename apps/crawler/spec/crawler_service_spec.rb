@@ -29,7 +29,7 @@ RSpec.describe CrawlerService do
     let(:catalog) { double('catalog') }
 
     before do
-      Search.create('warszawa', {})
+      Search.create('my_search', 'warszawa', {})
       allow(ParserFactory).to receive(:new_for).and_return([parser])
       allow(parser).to receive(:parse_index).and_return([listing])
       crawler_service.instance_variable_set(:@catalog, catalog)

@@ -11,8 +11,9 @@ class CrawlerService
     $logger&.warn "Could not connect to catalog service: #{e}"
   end
 
-  def watch(search_id:, city:, filters: [])
-    Search.create(city, filters)
+  def watch(search_id:, city:, filters: {})
+    Search.create(search_id, city, filters)
+  end
   end
 
   def crawl
