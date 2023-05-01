@@ -2,6 +2,7 @@ require 'drb/drb'
 require 'telegram/bot'
 
 class TgBotService
+  include DRb::DRbUndumped
 
   def initialize
     @crawler = DRbObject.new_with_uri(ENV['CRAWLER_DRB_URI'])
@@ -36,6 +37,16 @@ class TgBotService
 
   def stop_bot
     @bot_thread&.kill
+  end
+
+  def update(notify_type, args)
+    listing = args[:listing]
+    matched_search_ids = args[:matched_search_ids]
+
+    $logger&.info "New listing found: #{listing[:url]}"
+    matched_search_ids.each do |search_id|
+      Telegram::Bot::Api.new(ENV['TELEGRAM_TOKEN']).send_message(chat_id: search_id, text: "New listing found: #{listing[:url]}")
+    end
   end
 
   def help_message

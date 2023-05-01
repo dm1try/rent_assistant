@@ -33,7 +33,7 @@ class CrawlerService
 
           if matched_search_ids.any?
             changed
-            notify_observers(:new_listing, listing: listing, matched_search_ids: matched_search_ids)
+            notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
           end
         end
       end
