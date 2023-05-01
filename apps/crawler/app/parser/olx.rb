@@ -38,6 +38,7 @@ class Olx < Parser
     if ad_data["id"]
       {
         url: ad_data["url"],
+        city: ad_data.dig("location", "cityNormalizedName"),
         address: ad_data.dig("location", "pathName"),
         price: ad_data.dig("price", "regularPrice", "value"),
         area: dig_area(ad_data),
@@ -45,6 +46,7 @@ class Olx < Parser
         location: dig_location(ad_data),
         images: ad_data["photos"],
         description: ad_data.dig("description"),
+        currency: ad_data.dig("price", "regularPrice", "currencyCode"),
         source:{
           id: ad_data["id"],
           created_at: ad_data["createdTime"],
