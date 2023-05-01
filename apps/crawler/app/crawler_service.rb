@@ -1,6 +1,10 @@
 require 'drb/drb'
-
+require 'search'
+require 'parser_factory'
+require 'drb/observer'
 class CrawlerService
+  include DRb::DRbObservable
+
   def initialize
     @catalog = DRbObject.new_with_uri(ENV['CATALOG_DRB_URI'])
     @parsers = []
@@ -8,19 +12,33 @@ class CrawlerService
     $logger&.warn "Could not connect to catalog service: #{e}"
   end
 
+  def watch(search_id:, city:, filters: [])
+    Search.create(filters: filters, city: city, search_id: search_id)
+    @parsers << ParserFactory.new_for(city, filters)
+  end
+
+  def crawl
+    @parsers.each do |parser|
+      parser.parse_index.each do |listing|
+        next if @catalog.listing_exists?(listing[:url])
+        parser.parse_listing(listing).tap do |listing|
+          @catalog.save_listing(listing)
+          matched_search_ids = Search.percolate(listing)
+
+          if matched_search_ids.any?
+            changed
+            notify_observers(:new_listing, listing: listing, matched_search_ids: matched_search_ids)
+          end
+        end
+      end
+    end
+  end
+
   def start_crawling
     @crawling_thread =  Thread.new do
       loop do
         $logger&.info "Crawling..."
-        @parsers.each do |parser|
-          index_listings = parser.parse_index
-          index_listings.each do |listing|
-            next if @catalog.listing_exists?(listing[:url])
-            parser.parse_listing(listing).tap do |listing|
-              @catalog.save_listing(listing)
-            end
-          end
-        end
+        crawl
 
         $logger&.info "Crawling done, sleeping..."
         sleep rand(10..30)

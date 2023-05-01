@@ -12,6 +12,10 @@ gem "nokogiri", "~> 1.14"
 
 gem "vcr", "~> 6.1", :group => :test
 
+gem "sequel", "~> 5.67"
+
+gem 'sqlite3'
+
 gem "webmock", "~> 3.18", :group => :test
 
 gem "dotenv", "~> 2.8"

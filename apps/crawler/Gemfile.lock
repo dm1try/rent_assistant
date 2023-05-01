@@ -35,6 +35,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
+    sequel (5.67.0)
+    sqlite3 (1.6.2-x86_64-darwin)
     vcr (6.1.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
@@ -49,6 +51,8 @@ DEPENDENCIES
   nokogiri (~> 1.14)
   rerun
   rspec (~> 3.12)
+  sequel (~> 5.67)
+  sqlite3
   vcr (~> 6.1)
   webmock (~> 3.18)
 
