@@ -23,7 +23,7 @@ class Search
         next
       end
 
-      found_search_ids << search[:id]
+      found_search_ids << search[:search_id]
     end
   end
 end

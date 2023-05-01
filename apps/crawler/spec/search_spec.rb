@@ -45,7 +45,7 @@ RSpec.describe Search do
       end
 
       it 'returns matched searches' do
-        expect(Search.percolate(listing)).to eq([DB[:searches].first[:id]])
+        expect(Search.percolate(listing)).to eq([DB[:searches].first[:search_id]])
         expect(Search.percolate(not_matching_listing)).to eq([])
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Search do
       end
 
       it 'returns all searches' do
-        expect(Search.percolate(listing)).to eq([DB[:searches].first[:id]])
+        expect(Search.percolate(listing)).to eq([DB[:searches].first[:search_id]])
       end
     end
   end
