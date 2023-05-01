@@ -53,7 +53,7 @@ task :deploy do
 
     on :launch do
       in_path(fetch(:current_path)) do
-        command %(sudo /home/deploy/.rbenv/shims/foreman export systemd /etc/systemd/system -a #{fetch(:application_name)} -u #{fetch(:user)} -l #{fetch(:shared_path)}/log -f Procfile -e config/.env.prod)
+        command %(sudo /home/deploy/.rbenv/shims/foreman export systemd /etc/systemd/system -a #{fetch(:application_name)} -u #{fetch(:user)} -l #{fetch(:shared_path)}/log -f Procfile.prod -e config/.env.prod)
         command %(sudo systemctl daemon-reload)
         command %(sudo systemctl restart #{fetch(:application_name)}.target)
       end
