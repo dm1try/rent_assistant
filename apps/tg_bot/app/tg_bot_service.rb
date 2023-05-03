@@ -64,6 +64,7 @@ class TgBotService
 
   def stop_bot
     @bot_thread&.kill
+    true
   end
 
   def update(notify_type, args)
