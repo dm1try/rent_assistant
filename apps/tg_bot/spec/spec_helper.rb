@@ -98,4 +98,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+  config.around(:each) do |example|
+    DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
+  end
 end
