@@ -75,8 +75,13 @@ class TgBotService
             bot.api.send_message(chat_id: message.chat.id, text: "You need to specify min and max price, #{message.from.first_name}")
             return
           end
+          chat = Chat.find_or_create_by_tg_id(message.chat.id)
+          chat.update_filters(price: { min: min_price.to_i, max: max_price.to_i })
 
-          @crawler.watch(search_id: message.chat.id, city: 'krakow', filters: {price: {min: min_price.to_i, max: max_price.to_i}})
+          if chat.active
+            @crawler.watch(search_id: message.chat.id,city: chat.filters[:city], filters: chat.filters)
+          end
+
           bot.api.send_message(chat_id: message.chat.id, text: "You will receive notifications for new listings in Krakow with price between #{min_price} and #{max_price}, #{message.from.first_name}")
         end
       else

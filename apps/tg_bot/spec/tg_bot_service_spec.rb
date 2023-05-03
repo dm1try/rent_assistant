@@ -97,6 +97,22 @@ describe TgBotService do
         expect(Chat.last.active).to be_truthy
       end
     end
+
+    context 'when command is /filter price <min> <max>' do
+      let(:crawler) { double('crawler') }
+      let(:tg_chat) { Chat.create(tg_id: 1, active: true) }
+
+      before do
+        subject.instance_variable_set(:@crawler, crawler)
+        allow(crawler).to receive(:watch)
+        allow(message).to receive(:text).and_return('/filter price 100 200')
+      end
+
+      it 'updates chat filters' do
+        subject.handle_message(bot, message)
+        expect(Chat.last.filters).to eq(price: {min: 100, max: 200})
+      end
+    end
   end
 
   describe '#update' do

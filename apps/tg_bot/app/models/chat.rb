@@ -6,12 +6,15 @@ class Chat < Sequel::Model
   end
 
   def update_filters(filters)
-    existing_filters = JSON.parse(self.filters)
-    existing_filters.merge!(filters)
-    update(filters: JSON.dump(existing_filters))
+    new_filters = self.filters.merge(filters)
+    update(filters: JSON.dump(new_filters))
   end
 
   def clear_filters
     update(filters: JSON.dump({}))
+  end
+
+  def filters
+    JSON.parse(super, symbolize_names: true)
   end
 end

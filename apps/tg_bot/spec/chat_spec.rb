@@ -32,12 +32,12 @@ describe Chat do
     let(:chat) { Chat.create(tg_id: 1) }
 
     it 'updates the filters' do
-      expect { chat.update_filters('a' => 1) }.to change { chat.reload.filters }.to('{"a":1}')
+      expect { chat.update_filters('a' => 1) }.to change { chat.reload.filters }.to({a:1})
     end
 
     it 'merges the filters' do
       chat.update_filters('a' => 1)
-      expect { chat.update_filters('b' => 2) }.to change { chat.reload.filters }.to('{"a":1,"b":2}')
+      expect { chat.update_filters('b' => 2) }.to change { chat.reload.filters }.to({a:1,b:2})
     end
   end
 
@@ -45,7 +45,7 @@ describe Chat do
     let(:chat) { Chat.create(tg_id: 1, filters: '{"a":1}') }
 
     it 'clears the filters' do
-      expect { chat.clear_filters }.to change { chat.reload.filters }.to('{}')
+      expect { chat.clear_filters }.to change { chat.reload.filters }.to({})
     end
   end
 end
