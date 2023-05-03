@@ -1,5 +1,6 @@
 require 'drb/drb'
 require 'telegram/bot'
+require 'models/chat'
 
 class TgBotService
   include DRb::DRbUndumped
@@ -28,19 +29,34 @@ class TgBotService
   end
 
   def handle_message(bot, message)
+    if message.text.nil?
+      $logger&.info "Received message with nil text: #{message.inspect}"
+      return
+    end
+
     if message.text.start_with?('/')
       command_params = message.text[1..].split(' ')
       case command_params[0]
       when 'start', 'help'
+        chat = Chat.find_or_create_by_tg_id(message.chat.id)
+        chat.update(active: true)
+
         bot.api.send_message(chat_id: message.chat.id, text: help_message)
       when 'stop'
+        chat = Chat.find_or_create_by_tg_id(message.chat.id)
+        chat.update(active: false)
         @crawler.unwatch(search_id: message.chat.id)
+
         bot.api.send_message(chat_id: message.chat.id, text: "You won't receive notifications anymore, #{message.from.first_name}")
       when 'watch'
         if command_params[1].nil?
           bot.api.send_message(chat_id: message.chat.id, text: "You need to specify a city, #{message.from.first_name}")
           return
         end
+
+        chat = Chat.find_or_create_by_tg_id(message.chat.id)
+        chat.update_filters(city: command_params[1])
+        chat.update(active: true)
 
         @crawler.watch(search_id: message.chat.id, city: command_params[1] || 'krakow', filters: {})
         bot.api.send_message(chat_id: message.chat.id, text: "You will receive notifications for new listings in #{command_params[1]}, #{message.from.first_name}")

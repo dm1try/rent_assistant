@@ -32,6 +32,73 @@ describe TgBotService do
     end
   end
 
+  describe '#handle_message' do
+    let(:bot) { double('bot') }
+    let(:message) { double('message') }
+    let(:chat) { double('chat') }
+    let(:from) { double('from') }
+    let(:api) { double('api') }
+
+    before do
+      allow(bot).to receive(:api).and_return(api)
+      allow(api).to receive(:send_message).and_return(true)
+      allow(message).to receive(:text)
+      allow(message).to receive(:chat).and_return(chat)
+      allow(chat).to receive(:id).and_return(1)
+      allow(message).to receive(:from).and_return(from)
+      allow(from).to receive(:first_name).and_return('John')
+      DB[:chats].delete
+    end
+
+    context 'when command is /start' do
+      before do
+        allow(message).to receive(:text).and_return('/start')
+      end
+
+      it 'creates a new chat' do
+        expect { subject.handle_message(bot, message) }.to change { Chat.count }.by(1)
+      end
+
+      it 'sends help message' do
+        subject.handle_message(bot, message)
+        expect(api).to have_received(:send_message)
+      end
+    end
+
+    context 'when command is /stop' do
+      let(:crawler) { double('crawler') }
+      let(:tg_chat) { Chat.create(tg_id: 1, active: true, filters: JSON.dump({})) }
+
+      before do
+        allow(chat).to receive(:id).and_return(1)
+        subject.instance_variable_set(:@crawler, crawler)
+        allow(crawler).to receive(:unwatch)
+        allow(message).to receive(:text).and_return('/stop')
+      end
+
+      it 'set chat to inactive' do
+        subject.handle_message(bot, message)
+        expect(Chat.last.active).to be_falsey
+      end
+    end
+
+    context 'when command is /watch' do
+      let(:crawler) { double('crawler') }
+      let(:tg_chat) { Chat.create(tg_id: 1, active: true) }
+
+      before do
+        subject.instance_variable_set(:@crawler, crawler)
+        allow(crawler).to receive(:watch)
+        allow(message).to receive(:text).and_return('/watch krakow')
+      end
+
+      it 'set chat to active' do
+        subject.handle_message(bot, message)
+        expect(Chat.last.active).to be_truthy
+      end
+    end
+  end
+
   describe '#update' do
     let (:listing) { {id: 1, title: 'title', url: 'url', price: 1000, city: 'krakow', filters: {}} }
     let (:matched_search_ids) { [1] }
