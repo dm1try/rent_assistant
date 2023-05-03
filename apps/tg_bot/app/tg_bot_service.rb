@@ -64,10 +64,10 @@ class TgBotService
           bot.api.send_message(chat_id: message.chat.id, text: "You will receive notifications for new listings in Krakow with price between #{min_price} and #{max_price}, #{message.from.first_name}")
         end
       else
-        bot.api.send_message(chat_id: message.chat.id, text: "I don't understand you, #{message.from.first_name}. To see available commands, type /start or /help")
+        bot.api.send_message(chat_id: message.chat.id, text: "I don't understand you, #{message.from.first_name}. To see available commands, type /help")
       end
     else
-      bot.api.send_message(chat_id: message.chat.id, text: "I don't understand you, #{message.from.first_name}. To see available commands, type /start")
+      bot.api.send_message(chat_id: message.chat.id, text: "I don't understand you, #{message.from.first_name}. To see available commands, type /help")
     end
   end
 
@@ -82,11 +82,13 @@ class TgBotService
   end
 
   def help_message
-    %q(Available commands:
-      /start /help - start bot
-      /stop - stop bot
-      /watch <city> - subscribe to notifications for new listings in <city>
+    <<~EOS
+      Available commands:
+      /watch - start watching for new listings in choosen city, choose the city using the menu
+      /stop - stops bot, you won't receive notifications anymore
       /filter price <min_price> <max_price> - set price filter)
+      /help - shows this message
+    EOS
   end
 
 end
