@@ -4,6 +4,10 @@ require 'models/chat'
 describe Chat do
   describe '.find_or_create_by_tg_id' do
     context 'when chat does not exist' do
+      before do
+        DB[:chats].delete
+      end
+
       it 'creates a new chat' do
         expect { Chat.find_or_create_by_tg_id(1) }.to change { Chat.count }.by(1)
       end
