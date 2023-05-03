@@ -89,12 +89,18 @@ describe TgBotService do
       before do
         subject.instance_variable_set(:@crawler, crawler)
         allow(crawler).to receive(:watch)
+        allow(crawler).to receive(:unwatch)
         allow(message).to receive(:text).and_return('/watch krakow')
       end
 
       it 'set chat to active' do
         subject.handle_message(bot, message)
         expect(Chat.last.active).to be_truthy
+      end
+
+      it 'unwatches previous search' do
+        subject.handle_message(bot, message)
+        expect(crawler).to have_received(:unwatch).with(search_id: 1)
       end
     end
 

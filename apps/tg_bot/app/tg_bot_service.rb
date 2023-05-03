@@ -58,7 +58,8 @@ class TgBotService
         chat.update_filters(city: command_params[1])
         chat.update(active: true)
 
-        @crawler.watch(search_id: message.chat.id, city: command_params[1] || 'krakow', filters: {})
+        @crawler.unwatch(search_id: message.chat.id)
+        @crawler.watch(search_id: message.chat.id,city: chat.filters[:city], filters: chat.filters)
         bot.api.send_message(chat_id: message.chat.id, text: "You will receive notifications for new listings in #{command_params[1]}, #{message.from.first_name}")
       when 'filter'
         if command_params[1].nil?
@@ -79,6 +80,7 @@ class TgBotService
           chat.update_filters(price: { min: min_price.to_i, max: max_price.to_i })
 
           if chat.active
+            @crawler.unwatch(search_id: message.chat.id)
             @crawler.watch(search_id: message.chat.id,city: chat.filters[:city], filters: chat.filters)
           end
 
