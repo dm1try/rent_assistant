@@ -84,6 +84,14 @@ class TgBotService
 
           bot.api.send_message(chat_id: message.chat.id, text: "You will receive notifications for new listings in Krakow with price between #{min_price} and #{max_price}, #{message.from.first_name}")
         end
+      when 'status'
+        chat = Chat.find_or_create_by_tg_id(message.chat.id)
+        status_message = "Notifications are #{chat.active ? 'ON' : 'OFF'}\n"
+        status_message += "Watching for listings in #{chat.filters[:city]}\n"
+        if chat.filters[:price]
+          status_message += "Price between #{chat.filters[:price][:min]} and #{chat.filters[:price][:max]}\n"
+        end
+        bot.api.send_message(chat_id: message.chat.id, text: status_message)
       else
         bot.api.send_message(chat_id: message.chat.id, text: "I don't understand you, #{message.from.first_name}. To see available commands, type /help")
       end
@@ -106,6 +114,7 @@ class TgBotService
     <<~EOS
       Available commands:
       /watch - start watching for new listings in choosen city, choose the city using the menu
+      /status - shows current watch status and filters
       /stop - stops bot, you won't receive notifications anymore
       /filter price <min_price> <max_price> - set price filter)
       /help - shows this message

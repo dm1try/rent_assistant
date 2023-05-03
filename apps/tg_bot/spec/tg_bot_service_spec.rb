@@ -113,6 +113,20 @@ describe TgBotService do
         expect(Chat.last.filters).to eq(price: {min: 100, max: 200})
       end
     end
+
+    context 'when command is /status' do
+      let(:tg_chat) { Chat.create(tg_id: 1, active: true, filters: JSON.dump({city: 'krakow'})) }
+
+      before do
+        tg_chat
+        allow(message).to receive(:text).and_return('/status')
+      end
+
+      it 'sends status message' do
+        subject.handle_message(bot, message)
+        expect(api).to have_received(:send_message).with(chat_id: 1, text: "Notifications are ON\nWatching for listings in krakow\n")
+      end
+    end
   end
 
   describe '#update' do
