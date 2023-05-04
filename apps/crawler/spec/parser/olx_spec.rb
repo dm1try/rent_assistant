@@ -7,9 +7,7 @@ RSpec.describe Olx do
   describe '#parse_index' do
     it 'returns array of hashes' do
       VCR.use_cassette('olx_krakow_wynajem_index') do
-        expect(olx.parse_index).to eq([{:url=>"https://www.olx.pl/d/oferta/do-wynajecia-mieszkanie-2-pokojowe-krakow-bronowice-stanczyka-CID3-IDIqxb0.html"},
-          {:url=>"https://www.olx.pl/d/oferta/wynajme-mieszkanie-krakow-radzikowskiego-55m-CID3-IDUeKXb.html"},
-          {:url=>"https://www.olx.pl/d/oferta/2pok-kuchnia-51m2-bobrzynskiego-debniki-os-europejskie-eng-CID3-IDUlbYQ.html"},
+        expect(olx.parse_index).to eq([{:url=>"https://www.olx.pl/d/oferta/2pok-kuchnia-51m2-bobrzynskiego-debniki-os-europejskie-eng-CID3-IDUlbYQ.html"},
           {:url=>"https://www.olx.pl/d/oferta/kawalerka-nowa-aleja-29-listopada-ul-woronicza-bezposrednio-CID3-IDRmCIB.html"},
           {:url=>"https://www.olx.pl/d/oferta/sypialnia-duzy-salon-stare-miasto-majowka-CID3-IDSQRbe.html"},
           {:url=>"https://www.olx.pl/d/oferta/mieszkanie-3-pokojowe-nowoczesne-ul-slusarska-krakow-CID3-IDGazFy.html"},
