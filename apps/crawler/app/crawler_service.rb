@@ -38,6 +38,8 @@ class CrawlerService
         end
       end
     end
+    rescue => e
+      $logger&.error "Parser error: #{e}"
   end
 
   def start_crawling
