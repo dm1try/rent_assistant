@@ -2,11 +2,10 @@ require 'parser'
 
 class Olx < Parser
   def parse_index
-    get_html(@url).css("#div-gpt-ad-listing-sponsored-ad ~ div[data-cy=\"l-card\"] a[href^='/d/']").map do |offer|
+    get_html(@url).css("div[data-cy=\"l-card\"] a[href^='/d/']").each_with_object([]) do |offer, results|
+      next if offer.css("div[data-testid='adCard-featured']").any?
       href = offer.attr('href')
-      {
-        url: "https://www.olx.pl#{href}"
-      }
+      results << { url: "https://www.olx.pl#{href}" }
     end
   end
 
