@@ -23,6 +23,7 @@ class CrawlerService
     parsers = Search.active_cities.each_with_object([]) do |city, available_parsers|
       available_parsers.concat(ParserFactory.new_for(city))
     end
+    $logger&.info "Using parsers: #{parsers.map(&:class).map(&:name).join(', ')}"
 
     parsers.each do |parser|
       parser.parse_index.each do |listing|
@@ -38,8 +39,8 @@ class CrawlerService
         end
       end
     end
-    rescue => e
-      $logger&.error "Parser error: #{e}"
+  rescue => e
+    $logger&.error "Parser error: #{e}"
   end
 
   def start_crawling
