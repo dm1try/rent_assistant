@@ -44,6 +44,7 @@ describe TgBotService do
       allow(api).to receive(:send_message).and_return(true)
       allow(message).to receive(:text)
       allow(message).to receive(:chat).and_return(chat)
+      allow(message).to receive(:message_id).and_return(1)
       allow(chat).to receive(:id).and_return(1)
       allow(message).to receive(:from).and_return(from)
       allow(from).to receive(:first_name).and_return('John')
@@ -93,14 +94,11 @@ describe TgBotService do
         allow(message).to receive(:text).and_return('/watch krakow')
       end
 
-      it 'set chat to active' do
+      it 'sends message about choosing city' do
         subject.handle_message(bot, message)
-        expect(Chat.last.active).to be_truthy
-      end
-
-      it 'unwatches previous search' do
-        subject.handle_message(bot, message)
-        expect(crawler).to have_received(:unwatch).with(search_id: 1)
+        expect(api).to have_received(:send_message) do |args|
+          expect(args[:text]).to include('You should choose a city at least')
+        end
       end
     end
 
@@ -114,9 +112,11 @@ describe TgBotService do
         allow(message).to receive(:text).and_return('/filter price 100 200')
       end
 
-      it 'updates chat filters' do
+      it 'sends message about choosing filters' do
         subject.handle_message(bot, message)
-        expect(Chat.last.filters).to eq(price: {min: 100, max: 200})
+        expect(api).to have_received(:send_message) do |args|
+          expect(args[:text]).to include('Choose a filter or clear all of them')
+        end
       end
     end
 
@@ -130,7 +130,9 @@ describe TgBotService do
 
       it 'sends status message' do
         subject.handle_message(bot, message)
-        expect(api).to have_received(:send_message).with(chat_id: 1, text: "Notifications are ON\nWatching for listings in krakow\n")
+        expect(api).to have_received(:send_message) do |args|
+          expect(args[:text]).to include('Watching')
+        end
       end
     end
   end
@@ -142,12 +144,14 @@ describe TgBotService do
 
     before do
       allow(Telegram::Bot::Api).to receive(:new).and_return(api)
-      allow(api).to receive(:send_message).and_return(true)
+      allow(api).to receive(:send_media_group).and_return(true)
     end
 
     it 'handles update notification from crawler' do
       subject.update('new_listing', listing: listing, matched_search_ids: matched_search_ids)
-      expect(api).to have_received(:send_message).with(chat_id: 1, text: "New listing found: #{listing[:url]}")
+      expect(api).to have_received(:send_media_group) do |args|
+        expect(args[:media]).to be_a_kind_of(Array)
+      end
     end
   end
 end
