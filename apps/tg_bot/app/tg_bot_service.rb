@@ -1,6 +1,7 @@
 require 'drb/drb'
 require 'telegram/bot'
 require 'models/chat'
+require 'time_difference'
 
 class TgBotService
   include DRb::DRbUndumped
@@ -159,7 +160,8 @@ class TgBotService
         params[:caption] = <<~EOS
           #{listing[:address]}, #{listing[:area]} m2, #{listing[:price]} PLN
           #{listing[:url]}
-          #{listing[:source][:created_at]} #{listing[:source][:updated_at]}
+          Created #{humanize_time(listing[:source][:created_at])}
+          Updated #{humanize_time(listing[:source][:updated_at])}
         EOS
       end
 
@@ -220,5 +222,18 @@ class TgBotService
     callback_data = { action: action }.merge(data)
     callback_data = JSON.generate(callback_data)
     Telegram::Bot::Types::InlineKeyboardButton.new(text: text, callback_data: callback_data)
+  end
+
+  private
+
+  def humanize_time(time)
+    now_diff = Time.now - Time.parse(time)
+    if now_diff < (3600 * 24)
+      # less than 24 hours ago
+      "#{TimeDifference.between(time, Time.now).humanize} ago"
+    else
+      # more than 24 hours ago
+      Time.parse(time).strftime('%d %b %Y %H:%M')
+    end
   end
 end
