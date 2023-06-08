@@ -23,6 +23,11 @@ class Search
         next
       end
 
+      if (listing[:area] && filters[:area]) &&
+        !(listing[:area] >= filters[:area][:min] && listing[:area] <= filters[:area][:max])
+        next
+      end
+      
       found_search_ids << search[:search_id]
     end
   end
