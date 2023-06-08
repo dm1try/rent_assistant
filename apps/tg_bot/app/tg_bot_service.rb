@@ -41,9 +41,10 @@ class TgBotService
     true
   end
 
-  def handle_callback_query(bot, message)
-    chat = Chat.find_or_create_by_tg_id(message.from.id)
-    payload = JSON.parse(message.data)
+  def handle_callback_query(bot, query_result)
+    chat_id = query_result.message&.chat&.id || query_result.from.id
+    chat = Chat.find_or_create_by_tg_id(chat_id)
+    payload = JSON.parse(query_result.data)
     case payload['action']
     when 'city_filter_selected'
       kb = [
@@ -61,9 +62,9 @@ class TgBotService
       bot.api.send_message(chat_id: chat.tg_id, text: "City selected!\n#{watching_message(chat)}")
     when 'price_filter_selected'
       chat.update_state(current_action: 'set_min_price')
-      choose_range_reply(bot, message, 'Minimum price?', ['2000', '3000', '3500', '4000'])
+      choose_range_reply(bot, query_result.message, 'Minimum price?', ['2000', '3000', '3500', '4000'])
     when 'filters_clear'
-      chat = Chat.find_or_create_by_tg_id(message.from.id)
+      chat = Chat.find_or_create_by_tg_id(chat_id)
       # save chosen city
       city = chat.filters[:city]
       chat.clear_filters
@@ -215,7 +216,7 @@ class TgBotService
       ],
       one_time_keyboard: true
     )
-    bot.api.send_message(chat_id: message.from.id, text: question, reply_markup: answers)
+    bot.api.send_message(chat_id: message.chat.id, text: question, reply_markup: answers)
   end
 
   def inline_button_with_action(text, action, data = {})
