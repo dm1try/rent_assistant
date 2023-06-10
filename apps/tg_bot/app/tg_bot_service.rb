@@ -93,6 +93,7 @@ class TgBotService
       chat.update_state(max_price: message.text.to_i, current_action: nil)
       chat.update_filters(price: { min: chat.state[:min_price], max: chat.state[:max_price] })
       bot.api.send_message(chat_id: message.chat.id, text: watching_message(chat) , reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
+      rewatch(chat) if chat.active
       return
     when 'set_min_area'
       chat.update_state(min_area: message.text.to_i, current_action: 'set_max_area')
