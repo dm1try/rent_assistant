@@ -63,6 +63,9 @@ class TgBotService
     when 'price_filter_selected'
       chat.update_state(current_action: 'set_min_price')
       choose_range_reply(bot, query_result.message, 'Minimum price?', ['2000', '3000', '3500', '4000'])
+    when 'area_filter_selected'
+      chat.update_state(current_action: 'set_min_area')
+      choose_range_reply(bot, query_result.message, 'Minimum area?', ['20', '30', '40', '50'])
     when 'filters_clear'
       chat = Chat.find_or_create_by_tg_id(chat_id)
       # save chosen city
@@ -90,6 +93,16 @@ class TgBotService
       chat.update_state(max_price: message.text.to_i, current_action: nil)
       chat.update_filters(price: { min: chat.state[:min_price], max: chat.state[:max_price] })
       bot.api.send_message(chat_id: message.chat.id, text: watching_message(chat) , reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
+      return
+    when 'set_min_area'
+      chat.update_state(min_area: message.text.to_i, current_action: 'set_max_area')
+      choose_range_reply(bot, message, 'Maximum area?', ['50', '60', '80', '100'])
+      return
+    when 'set_max_area'
+      chat.update_state(max_area: message.text.to_i, current_action: nil)
+      chat.update_filters(area: { min: chat.state[:min_area], max: chat.state[:max_area] })
+      bot.api.send_message(chat_id: message.chat.id, text: watching_message(chat) , reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
+      rewatch(chat) if chat.active
       return
     end
 
@@ -129,6 +142,7 @@ class TgBotService
         kb = [[
           inline_button_with_action('City', 'city_filter_selected'),
           inline_button_with_action('Price', 'price_filter_selected'),
+          inline_button_with_action('Area', 'area_filter_selected'),
           inline_button_with_action('Clear all', 'filters_clear')
         ]]
         markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
@@ -195,11 +209,13 @@ class TgBotService
     <<~EOS
       Watching in #{CITY_NAMES_TO_PL[chat.filters[:city]]}, to stop watching type /stop
       #{chat.filters[:price] ? "Price between #{chat.filters[:price][:min]} and #{chat.filters[:price][:max]}" : ''}
+      #{chat.filters[:area] ? "Area between #{chat.filters[:area][:min]} and #{chat.filters[:area][:max]}" : ''}
     EOS
     else
     <<~EOS
       #{CITY_NAMES_TO_PL[chat.filters[:city]]} is choosen, to start watching type /watch
       #{chat.filters[:price] ? "Price between #{chat.filters[:price][:min]} and #{chat.filters[:price][:max]}" : ''}
+      #{chat.filters[:area] ? "Area between #{chat.filters[:area][:min]} and #{chat.filters[:area][:max]}" : ''}
     EOS
     end
   end
