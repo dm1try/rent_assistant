@@ -15,6 +15,7 @@ class TgBotService
 
   def initialize
     @crawler = DRbObject.new_with_uri(ENV['CRAWLER_DRB_URI'])
+    @send_queue = Queue.new
   end
 
   def start_bot
@@ -28,6 +29,29 @@ class TgBotService
             handle_callback_query(bot, message)
           end
         end
+      end
+    end
+    @send_thread = Thread.new do
+      loop do
+        message = @send_queue.pop
+        sleep 5
+        Telegram::Bot::Api.new(ENV['TELEGRAM_TOKEN']).send_media_group(**message)
+      rescue Telegram::Bot::Exceptions::ResponseError => e
+        $logger&.error "Error sending message: #{e}"
+        data = JSON.parse(e.response.body)
+        retry_after = data.dig('parameters', 'retry_after')
+        if retry_after
+          sleep retry_after + 1 
+          retry
+        else
+          $logger&.error "Error sending message: #{e}"
+        end
+      rescue Net::ReadTimeout => e
+        $logger&.error "Error sending message: #{e}, retry after 10 seconds"
+        sleep 10
+        retry
+      rescue => e
+        $logger&.error "#{e}"
       end
     end
     true
@@ -169,7 +193,7 @@ class TgBotService
 
     listing[:images] ||= []
 
-    images = listing[:images].take(3).each_with_index.map do |image, index|
+    images = listing[:images].take(8).each_with_index.map do |image, index|
       params = {media: image}
 
       if index == 0
@@ -186,10 +210,17 @@ class TgBotService
 
     matched_search_ids.each do |search_id|
      # Telegram::Bot::Api.new(ENV['TELEGRAM_TOKEN']).send_message(chat_id: search_id, text: "New listing found: #{listing[:url]}, #{listing[:price]}, #{listing[:address]}")
-      Telegram::Bot::Api.new(ENV['TELEGRAM_TOKEN']).send_media_group(chat_id: search_id, media: images)
+      send_message(chat_id: search_id, media: images)
+    # Telegram::Bot::Api.new(ENV['TELEGRAM_TOKEN']).send_media_group(chat_id: search_id, media: images)
+    rescue Telegram::Bot::Exceptions::ResponseError => e
+      $logger&.error "Error on sending message for listing #{listing[:url]} to chat #{search_id}: #{e.message}"
+      if e.error_code == 429
+        sleep 30
+        retry
+      end
     end
   rescue => e
-    $logger&.error e
+    $logger&.error "Error on sending message for listing #{listing[:url]}: #{e.message}"
   end
 
   def help_message
@@ -253,5 +284,9 @@ class TgBotService
       # more than 24 hours ago
       Time.parse(time).strftime('%d %b %Y %H:%M')
     end
+  end
+
+  def send_message(**args)
+    @send_queue << args
   end
 end
