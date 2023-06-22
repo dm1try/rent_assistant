@@ -6,7 +6,7 @@ class Olx < Parser
       next if offer.css("div[data-testid='adCard-featured']").any?
       href = offer.attr('href')
       results << { url: "https://www.olx.pl#{href}" }
-    end
+    end.reverse
   end
 
   def parse_listing(index_listing)
