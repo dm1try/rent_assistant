@@ -18,6 +18,11 @@ class Search
     DB[:searches].all.each_with_object([]) do |search, found_search_ids|
       filters = JSON.parse(search[:filters], symbolize_names: true)
 
+      if (listing[:city] && filters[:city]) &&
+        listing[:city] != filters[:city]
+        next
+      end
+      
       if (listing[:price] && filters[:price]) &&
         !(listing[:price] >= filters[:price][:min] && listing[:price] <= filters[:price][:max])
         next
