@@ -29,6 +29,8 @@ class TgBotService
             handle_callback_query(bot, message)
           end
         end
+      rescue => e
+        $logger&.error "Error: #{e}"
       end
     end
     @send_thread = Thread.new do
