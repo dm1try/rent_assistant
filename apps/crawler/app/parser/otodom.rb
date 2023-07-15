@@ -15,9 +15,9 @@ class Otodom < Parser
 
     json_data = JSON.parse(script_data)
     ad_data = json_data['props']['pageProps']['ad']
+    pp ad_data
     {
       url: ad_data['url'],
-      source: 'otodom',
       address: parse_address(ad_data),
       price: ad_data['target']['Price'],
       area: parse_area(ad_data),
@@ -29,7 +29,9 @@ class Otodom < Parser
       },
       location: parse_coordinates(ad_data),
       images: parse_images(ad_data),
-      description: Nokogiri::HTML(ad_data['description']).text
+      description: Nokogiri::HTML(ad_data['description']).text,
+      currency: 'PLN',
+      city: ad_data.dig('location', 'address', 'city', 'code')
     }
   rescue JSON::ParserError => error
     puts "Unable to parse listing #{error}"

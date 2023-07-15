@@ -23,10 +23,11 @@ RSpec.describe Otodom do
       VCR.use_cassette("otodom_listing") do
         expect(otodom.parse_listing(listing)).to eq({
           :url=>"https://www.otodom.pl/pl/oferta/piekne-mieszkanie-dwupokojowe-bemowo-bezposrednio-ID4miVr",
-          :source=>"otodom",
           :address=>"Warszawa, Bemowo, Lazurowa Dolina",
           :price=>2900,
+          :city=>"warszawa",
           :area=>50,
+          currency: 'PLN',
           :rooms=>2,
           :location=>[52.24782081211379, 20.896631494598378],
           :source => {
