@@ -15,7 +15,6 @@ class Otodom < Parser
 
     json_data = JSON.parse(script_data)
     ad_data = json_data['props']['pageProps']['ad']
-    puts Nokogiri::HTML(ad_data['description']).text
     {
       url: ad_data['url'],
       source: 'otodom',
