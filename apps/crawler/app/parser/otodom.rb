@@ -22,10 +22,12 @@ class Otodom < Parser
       address: parse_address(ad_data),
       price: ad_data['target']['Price'],
       area: parse_area(ad_data),
-      source_id: ad_data['publicId'],
       rooms: ad_data['target']['Rooms_num'].first.to_i,
-      source_created_at: ad_data['createdAt'],
-      source_updated_at: ad_data['modifiedAt'] || ad_data['createdAt'],
+      source: {
+        id: ad_data['publicId'],
+        created_at: ad_data['createdAt'],
+        updated_at: ad_data['modifiedAt'] || ad_data['createdAt']
+      },
       location: parse_coordinates(ad_data),
       images: parse_images(ad_data),
       description: Nokogiri::HTML(ad_data['description']).text
