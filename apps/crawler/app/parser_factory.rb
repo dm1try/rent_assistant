@@ -1,4 +1,5 @@
 require 'parser/olx'
+require 'parser/otodom'
 
 class ParserFactory
   def self.new_for(city, filters = {})
