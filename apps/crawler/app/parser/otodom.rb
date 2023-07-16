@@ -15,7 +15,6 @@ class Otodom < Parser
 
     json_data = JSON.parse(script_data)
     ad_data = json_data['props']['pageProps']['ad']
-    pp ad_data
     {
       url: ad_data['url'],
       address: parse_address(ad_data),
