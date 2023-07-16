@@ -40,5 +40,17 @@ RSpec.describe Otodom do
         })
       end
     end
+
+    context 'float area' do
+      let(:listing) { {url: "https://www.otodom.pl/pl/oferta/mieszkanie-2-pokoje-51-4-m2-ID4hDn0"} }
+
+      it 'parses area' do
+        VCR.use_cassette('otodom_float_area') do
+          expect(otodom.parse_listing(listing)).to include({
+            :area => 51
+          })
+        end
+      end
+    end
   end
 end

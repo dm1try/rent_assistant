@@ -60,7 +60,7 @@ class Otodom < Parser
   end
 
   def parse_area(ad_data)
-    Integer(ad_data['target']['Area'])
+    Float(ad_data['target']['Area']).to_i
   rescue ArgumentError
     nil
   end
