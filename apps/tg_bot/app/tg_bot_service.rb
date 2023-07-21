@@ -30,6 +30,7 @@ class TgBotService
           end
         end
       rescue => e
+        Rollbar.error(e)
         $logger&.error "Error: #{e}"
       end
     end
