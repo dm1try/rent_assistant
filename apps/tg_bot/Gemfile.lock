@@ -48,6 +48,7 @@ GEM
       ffi (~> 1.0)
     rerun (0.14.0)
       listen (~> 3.0)
+    rollbar (3.4.0)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -82,6 +83,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv (~> 2.8)
   rerun
+  rollbar
   rspec (~> 3.12)
   sequel (~> 5.67)
   sqlite3

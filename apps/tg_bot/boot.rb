@@ -9,6 +9,13 @@ $logger.level = Logger::INFO
 $stdout.sync = true
 
 require "sequel"
+
+require "rollbar"
+
+Rollbar.configure do |config|
+  config.access_token = ENV['ROLLBAR_TOKEN']
+end
+
 begin
   database_url = ENV['TG_BOT_DATABASE_URL'] || ENV['DATABASE_URL']
   DB = Sequel.connect(database_url)

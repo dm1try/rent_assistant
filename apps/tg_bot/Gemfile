@@ -17,3 +17,5 @@ gem "dotenv", "~> 2.8"
 gem "telegram-bot-ruby", "~> 1.0"
 
 gem "time_difference", "~> 0.7.0"
+
+gem 'rollbar'
