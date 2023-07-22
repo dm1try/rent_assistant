@@ -28,7 +28,13 @@ class CrawlerService
     parsers.each do |parser|
       parser.parse_index.each do |listing|
         next if @catalog.listing_exists?(listing[:url])
-        parser.parse_listing(listing).tap do |listing|
+        listing = parser.parse_listing(listing)
+        unless listing
+          $logger&.warn "Could not parse listing #{listing[:url]}"
+          Rollbar.warning("Could not parse listing #{listing[:url]}")
+          next
+        end
+        listing.tap do |listing|
           @catalog.save_listing(listing)
           matched_search_ids = Search.percolate(listing)
           $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
