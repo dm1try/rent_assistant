@@ -14,6 +14,8 @@ Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_TOKEN']
 end
 
+require "retryable"
+
 require "sequel"
 begin
   database_url = ENV['CRAWLER_DATABASE_URL'] || ENV['DATABASE_URL']

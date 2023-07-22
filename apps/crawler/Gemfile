@@ -21,3 +21,5 @@ gem "webmock", "~> 3.18", :group => :test
 gem "dotenv", "~> 2.8"
 
 gem "rollbar", "~> 3.4"
+
+gem "retryable", "~> 3.0"
