@@ -205,7 +205,9 @@ class TgBotService
           #{listing[:url]}
           Created #{humanize_time(listing[:source][:created_at])}
           Updated #{humanize_time(listing[:source][:updated_at])}
+          <a href="https://maps.google.com/?q=#{listing[:address]}">Open location on Google maps</a>
         EOS
+        params[:parse_mode] = 'HTML'
       end
 
       Telegram::Bot::Types::InputMediaPhoto.new(params)
