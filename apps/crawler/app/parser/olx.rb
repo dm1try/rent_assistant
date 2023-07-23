@@ -40,6 +40,7 @@ class Olx < Parser
         city: ad_data.dig("location", "cityNormalizedName"),
         address: ad_data.dig("location", "pathName"),
         price: ad_data.dig("price", "regularPrice", "value"),
+        additional_price: dig_additional_price(ad_data),
         area: dig_area(ad_data),
         rooms: dig_rooms(ad_data),
         location: dig_location(ad_data),
@@ -83,5 +84,12 @@ class Olx < Parser
   def dig_location(ad_data)
     map = ad_data['map']
     [map['lat'], map['lon']] if map
+  end
+
+  def dig_additional_price(ad_data)
+    rent_param = ad_data['params'].find { |param| param["key"] == "rent" }
+    return 0 unless rent_param
+
+    rent_param["normalizedValue"].to_i
   end
 end

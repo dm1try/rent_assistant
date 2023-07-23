@@ -58,6 +58,7 @@ RSpec.describe Olx do
             address: 'Małopolskie, Kraków, Stare Miasto',
             city: 'krakow',
             price: 5500,
+            additional_price: 600,
             location: [50.06026, 19.9396],
             area: 107,
             rooms: 3,
