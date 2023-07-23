@@ -10,6 +10,7 @@ RSpec.describe CatalogService do
     result = catalog_service.save_listing(
       city: "Listing title",
       price: 99,
+      additional_price: 99,
       description: "test",
       area: 99,
       rooms: 99,
