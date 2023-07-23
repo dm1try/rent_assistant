@@ -201,7 +201,7 @@ class TgBotService
 
       if index == 0
         params[:caption] = <<~EOS
-          #{listing[:address]}, #{listing[:area]} m2, #{listing[:price]} PLN
+          #{listing[:address]}, #{listing[:area]} m2, #{listing[:price]}(+#{listing[:additional_price]}) PLN
           #{listing[:url]}
           Created #{humanize_time(listing[:source][:created_at])}
           Updated #{humanize_time(listing[:source][:updated_at])}
