@@ -25,6 +25,7 @@ RSpec.describe Otodom do
           :url=>"https://www.otodom.pl/pl/oferta/piekne-mieszkanie-dwupokojowe-bemowo-bezposrednio-ID4miVr",
           :address=>"Warszawa, Bemowo, Lazurowa Dolina",
           :price=>2900,
+          :additional_price=>575,
           :city=>"warszawa",
           :area=>50,
           currency: 'PLN',

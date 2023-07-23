@@ -20,6 +20,7 @@ class Otodom < Parser
       url: ad_data['url'],
       address: parse_address(ad_data),
       price: ad_data['target']['Price'],
+      additional_price: ad_data.dig('target', 'Rent') || 0,
       area: parse_area(ad_data),
       rooms: ad_data['target']['Rooms_num'].first.to_i,
       source: {
