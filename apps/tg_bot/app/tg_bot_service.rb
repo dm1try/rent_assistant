@@ -285,8 +285,8 @@ class TgBotService
     humanized_time = Time.parse(time).strftime('%d %b %Y %H:%M')
     
     now_diff = Time.now - Time.parse(time)
-    if now_diff < (3600 * 24)
-      # less than 24 hours ago
+    if now_diff < 3600
+      # less than hour ago
       humanized_time << " (#{TimeDifference.between(time, Time.now).humanize} ago)"
     end
 
