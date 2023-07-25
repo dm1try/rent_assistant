@@ -15,7 +15,7 @@ class Otodom < Parser
 
     json_data = JSON.parse(script_data)
     ad_data = json_data['props']['pageProps']['ad']
-    rerurn nil unless ad_data
+    return nil unless ad_data
     {
       url: ad_data['url'],
       address: parse_address(ad_data),
