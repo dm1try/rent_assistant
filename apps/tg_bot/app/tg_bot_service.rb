@@ -2,6 +2,7 @@ require 'drb/drb'
 require 'telegram/bot'
 require 'models/chat'
 require 'time_difference'
+require 'cgi'
 
 class TgBotService
   include DRb::DRbUndumped
@@ -205,7 +206,7 @@ class TgBotService
           #{listing[:url]}
           Created #{humanize_time(listing[:source][:created_at])}
           Updated #{humanize_time(listing[:source][:updated_at])}
-          <a href="https://maps.google.com/?q=#{listing[:address]}">Open location on Google maps</a>
+          <a href="https://maps.google.com/?q=#{CGI.escapeURIComponent(listing[:address])}">Open location on Google maps</a>
         EOS
         params[:parse_mode] = 'HTML'
       end
