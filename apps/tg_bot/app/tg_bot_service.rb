@@ -94,6 +94,9 @@ class TgBotService
     when 'area_filter_selected'
       chat.update_state(current_action: 'set_min_area')
       choose_range_reply(bot, query_result.message, 'Minimum area?', ['20', '30', '40', '50'])
+    when 'address_exclude_filter_selected'
+      chat.update_state(current_action: 'set_address_exclude')
+      bot.api.send_message(chat_id: chat.tg_id, text: "Provide the address for excluding:")
     when 'filters_clear'
       chat = Chat.find_or_create_by_tg_id(chat_id)
       # save chosen city
@@ -130,6 +133,14 @@ class TgBotService
     when 'set_max_area'
       chat.update_state(max_area: message.text.to_i, current_action: nil)
       chat.update_filters(area: { min: chat.state[:min_area], max: chat.state[:max_area] })
+      bot.api.send_message(chat_id: message.chat.id, text: watching_message(chat) , reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
+      rewatch(chat) if chat.active
+      return
+    when 'set_address_exclude'
+      excludes = chat.state[:address_exclude] || []
+      excludes << message.text
+      chat.update_state(address_exclude: excludes, current_action: nil)
+      chat.update_filters(address: { exclude: excludes })
       bot.api.send_message(chat_id: message.chat.id, text: watching_message(chat) , reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
       rewatch(chat) if chat.active
       return
@@ -172,6 +183,7 @@ class TgBotService
           inline_button_with_action('City', 'city_filter_selected'),
           inline_button_with_action('Price', 'price_filter_selected'),
           inline_button_with_action('Area', 'area_filter_selected'),
+          inline_button_with_action('Address exclude', 'address_exclude_filter_selected'),
           inline_button_with_action('Clear all', 'filters_clear')
         ]]
         markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
@@ -248,6 +260,7 @@ class TgBotService
       Watching in #{CITY_NAMES_TO_PL[chat.filters[:city]]}, to stop watching type /stop
       #{chat.filters[:price] ? "Price between #{chat.filters[:price][:min]} and #{chat.filters[:price][:max]}" : ''}
       #{chat.filters[:area] ? "Area between #{chat.filters[:area][:min]} and #{chat.filters[:area][:max]}" : ''}
+      #{chat.filters[:address] ? "Address exclude: #{chat.filters[:address][:exclude]}" : ''}
     EOS
     else
     <<~EOS
