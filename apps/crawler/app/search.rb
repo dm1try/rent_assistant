@@ -33,6 +33,11 @@ class Search
         next
       end
       
+      if (listing[:address] && filters[:address] && filters[:address][:exclude]) &&
+        filters[:address][:exclude].any? { |exclude| listing[:address].include?(exclude) }
+        next
+      end
+
       found_search_ids << search[:search_id]
     end
   end

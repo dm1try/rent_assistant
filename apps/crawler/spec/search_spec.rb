@@ -155,5 +155,31 @@ RSpec.describe Search do
         expect(Search.percolate(listing)).to eq([])
       end
     end
+
+    context 'when listing does not match address exclude filter' do
+      let(:filters) { { address: {exclude: ['Stare Miasto']} } }
+      let(:listing) {
+        {
+          url: 'https://www.olx.pl/d/oferta/mieszkanie-3-pok-od-teraz-CID3-IDUlcmq.html',
+          address: 'Małopolskie, Kraków, Stare Miasto',
+          price: 5500,
+          location: [50.06026, 19.9396],
+          area: 107,
+          rooms: 3,
+          city: 'krakow',
+          description: "3 pokojowe mieszkanie<br />\nPiętro: 3/5, powierzchnia: 107,5 m2<br />\nSypialnie: 2<br />\nMieszkanie po remoncie",
+          images: [],
+          source: {:created_at=>"2023-04-30T13:18:50+02:00", :id=>832527222, :updated_at=>"2023-04-30T13:20:58+02:00"}
+        }
+      }
+
+      before do
+        Search.create(custom_id, city, filters)
+      end
+
+      it 'returns empty array' do
+        expect(Search.percolate(listing)).to eq([])
+      end
+    end
   end
 end
