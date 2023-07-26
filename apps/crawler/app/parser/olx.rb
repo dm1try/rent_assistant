@@ -34,6 +34,11 @@ class Olx < Parser
     end
 
     ad_data = json.dig("ad", "ad")
+    unless ad_data
+      Rollbar.warn("Unable to find ad data in json #{init_json}")
+      return nil
+    end
+    
     if ad_data["id"]
       {
         url: ad_data["url"],
