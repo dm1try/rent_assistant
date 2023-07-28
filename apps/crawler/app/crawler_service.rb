@@ -27,11 +27,12 @@ class CrawlerService
 
     parsers.each do |parser|
       parser.parse_index.each do |listing|
-        next if @catalog.listing_exists?(listing[:url])
+        listing_url = listing[:url]
+        next if @catalog.listing_exists?(listing_url)
         listing = parser.parse_listing(listing)
         unless listing
-          $logger&.warn "Could not parse listing #{listing[:url]}"
-          Rollbar.warning("Could not parse listing #{listing[:url]}")
+          $logger&.warn "Could not parse listing #{listing_url}"
+          Rollbar.warning("Could not parse listing #{listing_url}")
           next
         end
         listing.tap do |listing|
