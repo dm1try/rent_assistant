@@ -26,22 +26,26 @@ class CrawlerService
     $logger&.info "Using parsers: #{parsers.map(&:class).map(&:name).join(', ')}"
 
     parsers.each do |parser|
+      rollbar_scope = {:parser => parser.class.name}
       parser.parse_index.each do |listing|
         listing_url = listing[:url]
+        rollbar_scope[:listing_url] = listing_url
         next if @catalog.listing_exists?(listing_url)
-        listing = parser.parse_listing(listing)
-        unless listing
-          $logger&.warn "Could not parse listing #{listing_url}"
-          Rollbar.warning("Could not parse listing #{listing_url}")
-          next
-        end
-        listing.tap do |listing|
-          @catalog.save_listing(listing)
-          matched_search_ids = Search.percolate(listing)
-          $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
-          if matched_search_ids.any?
-            changed
-            notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
+        Rollbar.scoped(rollbar_scope) do
+          listing = parser.parse_listing(listing)
+          unless listing
+            $logger&.warn "Could not parse listing #{listing_url}"
+            Rollbar.warning("Could not parse listing #{listing_url}")
+            next
+          end
+          listing.tap do |listing|
+            @catalog.save_listing(listing)
+            matched_search_ids = Search.percolate(listing)
+            $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
+            if matched_search_ids.any?
+              changed
+              notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
+            end
           end
         end
       end
