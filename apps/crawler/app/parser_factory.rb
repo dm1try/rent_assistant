@@ -13,7 +13,7 @@ class ParserFactory
         "https://www.otodom.pl/pl/oferty/wynajem/mieszkanie/#{city.downcase}?page=1&limit=36"
       end
     [
-      Olx.new("https://www.olx.pl/nieruchomosci/mieszkania/wynajem/#{city.downcase}/"),
+      Olx.new("https://www.olx.pl/nieruchomosci/mieszkania/wynajem/#{city.downcase}/?search[order]=created_at:desc"),
       Otodom.new(otodom_url)
     ]
   end
