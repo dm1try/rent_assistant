@@ -46,7 +46,7 @@ class Olx < Parser
         address: ad_data.dig("location", "pathName"),
         price: ad_data.dig("price", "regularPrice", "value"),
         additional_price: dig_additional_price(ad_data),
-        area: dig_area(ad_data),
+        area: dig_area(ad_data) || 0,
         rooms: dig_rooms(ad_data),
         location: dig_location(ad_data),
         images: ad_data["photos"],
@@ -65,7 +65,13 @@ class Olx < Parser
   end
 
   def dig_area(ad_data)
-    ad_data.dig("params").find { |param| param["key"] == "m" }["normalizedValue"].to_i
+    return nil if ad_data.nil? || ad_data["params"].nil? || ad_data["params"].empty?
+  
+    param = ad_data["params"].find { |param| param["key"] == "m" }
+    
+    return nil if param.nil? || param["normalizedValue"].nil?
+  
+    param["normalizedValue"].to_i
   end
 
   def dig_rooms(ad_data)
