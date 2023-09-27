@@ -47,7 +47,7 @@ class Olx < Parser
         price: ad_data.dig("price", "regularPrice", "value"),
         additional_price: dig_additional_price(ad_data),
         area: dig_area(ad_data) || 0,
-        rooms: dig_rooms(ad_data),
+        rooms: dig_rooms(ad_data) || 0,
         location: dig_location(ad_data),
         images: ad_data["photos"],
         description: ad_data.dig("description"),
@@ -75,7 +75,10 @@ class Olx < Parser
   end
 
   def dig_rooms(ad_data)
-    rooms_eng = ad_data.dig("params").find { |param| param["key"] == "rooms" }["normalizedValue"]
+    rooms_val = ad_data.dig("params").find { |param| param["key"] == "rooms" }
+    return nil unless rooms_val
+
+    rooms_eng = rooms_val["normalizedValue"]
     case rooms_eng
     when "one"
       1

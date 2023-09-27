@@ -70,5 +70,15 @@ RSpec.describe Olx do
         )
       end
     end
+
+    context 'when listing does not contain area and rooms' do
+      let(:index_listing) { { url: 'https://www.olx.pl/d/oferta/wynajme-kawalerke-umeblowana-2100-CID3-IDTgb5B.html' } }
+
+      it 'returns 0 for area and rooms' do
+        VCR.use_cassette('olx_listing_without_area') do
+          expect(subject.parse_listing(index_listing)).to include(area: 0, rooms: 0)
+        end
+      end
+    end
   end
 end
