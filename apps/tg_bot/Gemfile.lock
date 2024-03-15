@@ -41,6 +41,7 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    mini_portile2 (2.8.5)
     minitest (5.18.0)
     multipart-post (2.3.0)
     rb-fsevent (0.11.2)
@@ -48,7 +49,7 @@ GEM
       ffi (~> 1.0)
     rerun (0.14.0)
       listen (~> 3.0)
-    rollbar (3.4.0)
+    rollbar (3.5.2)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -64,7 +65,8 @@ GEM
     rspec-support (3.12.0)
     ruby2_keywords (0.0.5)
     sequel (5.67.0)
-    sqlite3 (1.6.2-x86_64-darwin)
+    sqlite3 (1.6.2)
+      mini_portile2 (~> 2.8.0)
     telegram-bot-ruby (1.0.0)
       dry-struct (~> 1.6)
       faraday (~> 2.0)
@@ -79,6 +81,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   dotenv (~> 2.8)
