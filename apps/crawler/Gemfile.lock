@@ -42,7 +42,7 @@ GEM
     sequel (5.67.0)
     sqlite3 (1.6.2)
       mini_portile2 (~> 2.8.0)
-    vcr (6.1.0)
+    vcr (6.2.0)
     webmock (3.18.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
