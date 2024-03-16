@@ -18,7 +18,7 @@ gem 'sqlite3'
 
 gem "webmock", "~> 3.18", :group => :test
 
-gem "dotenv", "~> 2.8"
+gem "dotenv", "~> 3.0"
 
 gem "rollbar", "~> 3.4"
 

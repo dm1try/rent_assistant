@@ -12,7 +12,7 @@ gem "sequel", "~> 5.67"
 
 gem 'sqlite3'
 
-gem "dotenv", "~> 2.8"
+gem "dotenv", "~> 3.0"
 
 gem "telegram-bot-ruby", "~> 1.0"
 
