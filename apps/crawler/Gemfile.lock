@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
+    bigdecimal (1.4.4)
     crack (0.4.5)
       rexml
     diff-lcs (1.5.1)
@@ -40,7 +41,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    sequel (5.67.0)
+    sequel (5.78.0)
+      bigdecimal
     sqlite3 (1.6.2)
       mini_portile2 (~> 2.8.0)
     vcr (6.1.0)
