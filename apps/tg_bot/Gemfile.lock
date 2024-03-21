@@ -42,7 +42,6 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    mini_portile2 (2.8.5)
     minitest (5.18.0)
     multipart-post (2.3.0)
     rb-fsevent (0.11.2)
@@ -67,8 +66,8 @@ GEM
     ruby2_keywords (0.0.5)
     sequel (5.78.0)
       bigdecimal
-    sqlite3 (1.6.2)
-      mini_portile2 (~> 2.8.0)
+    sqlite3 (1.7.3-x86_64-darwin)
+    sqlite3 (1.7.3-x86_64-linux)
     telegram-bot-ruby (1.0.0)
       dry-struct (~> 1.6)
       faraday (~> 2.0)
