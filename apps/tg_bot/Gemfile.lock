@@ -65,7 +65,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
-    sequel (5.78.0)
+    sequel (5.79.0)
       bigdecimal
     sqlite3 (1.6.2)
       mini_portile2 (~> 2.8.0)
