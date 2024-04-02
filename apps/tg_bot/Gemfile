@@ -14,7 +14,7 @@ gem 'sqlite3'
 
 gem "dotenv", "~> 3.0"
 
-gem "telegram-bot-ruby", "~> 1.0"
+gem "telegram-bot-ruby", "~> 2.0"
 
 gem "time_difference", "~> 0.7.0"
 
