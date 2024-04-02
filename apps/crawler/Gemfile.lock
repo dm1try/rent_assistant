@@ -8,7 +8,7 @@ GEM
       bigdecimal
       rexml
     diff-lcs (1.5.1)
-    dotenv (2.8.1)
+    dotenv (3.1.0)
     ffi (1.15.5)
     hashdiff (1.1.0)
     listen (3.8.0)
@@ -56,7 +56,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  dotenv (~> 2.8)
+  dotenv (~> 3.0)
   nokogiri (~> 1.14)
   rerun
   retryable (~> 3.0)
