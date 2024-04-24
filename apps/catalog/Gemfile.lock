@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bigdecimal (1.4.4)
+    bigdecimal (3.1.7)
     diff-lcs (1.5.1)
     dotenv (3.1.0)
     ffi (1.15.5)
@@ -36,6 +36,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bigdecimal (~> 3.1)
   dotenv
   rerun
   rspec (~> 3.12)

@@ -11,3 +11,4 @@ end
 gem "rspec", "~> 3.12", :group => :test
 gem "sequel", "~> 5.67"
 gem 'sqlite3'
+gem "bigdecimal", "~> 3.1"
