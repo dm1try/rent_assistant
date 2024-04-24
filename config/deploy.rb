@@ -5,17 +5,19 @@ require 'mina/deploy'
 require 'mina/bundler'
 require 'mina/rbenv'
 
+deploy_user =  ENV['USER'] || 'deploy'
+
 set :application_name, 'rent_assistant'
 set :domain, ENV['DOMAIN']
-set :deploy_to, '/home/deploy/app'
+set :deploy_to, "/home/#{deploy_user}/app"
 set :repository, 'https://github.com/dm1try/rent_assistant.git'
 set :branch, ENV['BRANCH'] || 'main'
 set :execution_mode, :system
-set :rbenv_path, '/home/deploy/.rbenv'
+set :rbenv_path, "/home/#{deploy_user}/.rbenv"
 set :rbenv_ruby, '3.2.2'
 
 # Optional settings:
-set :user, 'deploy'          # Username in the server to SSH to.
+set :user, deploy_user         # Username in the server to SSH to.
 #   set :port, '30000'           # SSH port number.
 #   set :forward_agent, true     # SSH forward_agent.
 
@@ -53,7 +55,7 @@ task :deploy do
 
     on :launch do
       in_path(fetch(:current_path)) do
-        command %(sudo /home/deploy/.rbenv/shims/foreman export systemd /etc/systemd/system -a #{fetch(:application_name)} -u #{fetch(:user)} -l #{fetch(:shared_path)}/log -f Procfile.prod -e config/.env.prod)
+        command %(sudo /home/#{deploy_user}/.rbenv/shims/foreman export systemd /etc/systemd/system -a #{fetch(:application_name)} -u #{fetch(:user)} -l #{fetch(:shared_path)}/log -f Procfile.prod -e config/.env.prod)
         command %(sudo systemctl daemon-reload)
         command %(sudo systemctl restart #{fetch(:application_name)}.target)
       end
