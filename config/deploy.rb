@@ -51,6 +51,7 @@ task :deploy do
     invoke :'deploy:link_shared_paths'
     command %(cd apps/catalog && bundle config set without development test && bundle install && cd ../..)
     command %(cd apps/crawler && bundle config set without development test && bundle install && cd ../..)
+    command %(cd apps/tg_bot && bundle config set without development test && bundle install && cd ../..)
     invoke :'deploy:cleanup'
 
     on :launch do
