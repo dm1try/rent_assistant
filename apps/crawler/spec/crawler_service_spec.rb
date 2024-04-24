@@ -11,6 +11,7 @@ RSpec.describe CrawlerService do
 
     it 'logs crawling' do
       expect($logger).to receive(:info).with("Crawling...")
+      expect($logger).to receive(:info).with(/Using parsers/)
       expect($logger).to receive(:info) do |arg|
         expect(arg).to match(/Crawling done, sleeping for \d+ seconds.../)
       end
