@@ -40,6 +40,12 @@ task :setup do
   command %(mkdir -p "#{fetch(:shared_path)}/data")
 end
 
+task :sequel, [:db_name] do |_, args|
+  db_name = args[:db_name]
+  puts "Connecting to #{db_name}"
+  invoke :run, "sequel sqlite://#{fetch(:shared_path)}/config/#{db_name}.db"
+end
+
 desc 'Deploys the current version to the server.'
 task :deploy do
   # uncomment this line to make sure you pushed your local branch to the remote origin
