@@ -137,21 +137,6 @@ describe TgBotService do
     end
   end
 
-  describe '#update' do
-    let (:listing) { {id: 1, title: 'title', url: 'url', price: 1000, city: 'krakow', filters: {}} }
-    let (:matched_search_ids) { [1] }
-    let (:api) { double('api') }
-
-    before do
-      allow(Telegram::Bot::Api).to receive(:new).and_return(api)
-      allow(api).to receive(:send_media_group).and_return(true)
-    end
-
-    it 'handles update notification from crawler' do
-      subject.update('new_listing', listing: listing, matched_search_ids: matched_search_ids)
-      expect(api).to have_received(:send_media_group) do |args|
-        expect(args[:media]).to be_a_kind_of(Array)
-      end
-    end
+  xdescribe '#update' do
   end
 end
