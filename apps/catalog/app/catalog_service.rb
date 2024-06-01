@@ -1,9 +1,6 @@
-require 'drb/observer'
 require 'json'
 
 class CatalogService
-  include DRb::DRbObservable
-
   def save_listing(attributes)
     db_attributes = attributes.dup
     db_attributes[:created_at] ||= Time.now
