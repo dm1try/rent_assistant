@@ -1,9 +1,8 @@
 require 'drb/drb'
 require 'search'
 require 'parser_factory'
-require 'drb/observer'
+
 class CrawlerService
-  include DRb::DRbObservable
 
   def initialize
     @catalog = DRbObject.new_with_uri(ENV['CATALOG_DRB_URI'])
@@ -42,10 +41,6 @@ class CrawlerService
           @catalog.save_listing(listing)
           matched_search_ids = Search.percolate(listing)
           $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
-          if matched_search_ids.any?
-            changed
-            notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
-          end
         end
       end
     end
