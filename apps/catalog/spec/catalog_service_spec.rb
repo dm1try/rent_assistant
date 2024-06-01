@@ -55,13 +55,6 @@ RSpec.describe CatalogService do
     before do
       allow(observer).to receive(:update)
     end
-
-    it "notifies observers" do
-      catalog_service.add_observer(observer)
-      catalog_service.save_listing(listing_attributes)
-
-      expect(observer).to have_received(:update).with(:new_listing, DB[:listings].first[:id], listing_attributes)
-    end
   end
 
   describe '#listing_exists?' do
