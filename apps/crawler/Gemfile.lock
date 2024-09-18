@@ -8,7 +8,7 @@ GEM
       bigdecimal
       rexml
     diff-lcs (1.5.1)
-    dotenv (3.1.0)
+    dotenv (3.1.4)
     ffi (1.15.5)
     hashdiff (1.1.0)
     listen (3.8.0)
