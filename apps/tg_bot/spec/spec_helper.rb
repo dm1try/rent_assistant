@@ -76,10 +76,10 @@ RSpec.configure do |config|
   # individual spec file.
   if config.files_to_run.one?
     # Use the documentation formatter for detailed output,
-    # unless a formatter has already been configured
-    # (e.g. via a command-line flag).
-    config.default_formatter = "doc"
-  end
+  # unless a formatter has already been configured
+  # (e.g. via a command-line flag).
+  config.default_formatter = "doc"
+end
 
   # Print the 10 slowest examples and example groups at the
   # end of the spec run, to help surface which specs are running
@@ -104,6 +104,6 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Sequel.extension :migration
-    Sequel::Migrator.run(DB, 'db/migrations')
+    # Sequel::Migrator.run(DB, 'db/migrations')
   end
 end
