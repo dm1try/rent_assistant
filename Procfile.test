@@ -1,2 +1,3 @@
 catalog_test: cd ./apps/catalog && bundle exec rspec
 crawler_test: cd ./apps/crawler && bundle exec rspec
+tg_bot_test: cd ./apps/tg_bot && bundle exec rspec
