@@ -114,6 +114,6 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Sequel.extension :migration
-    Sequel::Migrator.run(DB, 'db/migrations')
+    # Sequel::Migrator.run(DB, 'db/migrations')
   end
 end
