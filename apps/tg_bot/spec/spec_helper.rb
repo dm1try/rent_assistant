@@ -25,7 +25,7 @@ RSpec.configure do |config|
     # and `failure_message` of custom matchers include text for helper methods
     # defined using `chain`, e.g.:
     #     be_bigger_than(2).and_smaller_than(4).description
-    #     # => "be bigger than 2 and smaller than 4"
+    #     # => "be bigger than 2"
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -100,5 +100,10 @@ RSpec.configure do |config|
 =end
   config.around(:each) do |example|
     DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
+  end
+
+  config.before(:suite) do
+    Sequel.extension :migration
+    Sequel::Migrator.run(DB, 'db/migrations')
   end
 end
