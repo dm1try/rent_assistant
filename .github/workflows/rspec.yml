@@ -28,6 +28,11 @@ jobs:
           cd apps/${{ matrix.app }}
           bundle install
 
+      - name: Set up test database
+        run: |
+          cd apps/${{ matrix.app }}
+          bundle exec sequel -m db/migrations sqlite://db/${{ matrix.app }}_test.db
+
       - name: Run RSpec tests
         run: |
           cd apps/${{ matrix.app }}
