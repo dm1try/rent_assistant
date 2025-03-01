@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bigdecimal (3.1.8)
+    bigdecimal (3.1.9)
     diff-lcs (1.5.1)
     dotenv (3.1.4)
     ffi (1.15.5)
@@ -26,7 +26,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    sequel (5.85.0)
+    sequel (5.90.0)
       bigdecimal
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
