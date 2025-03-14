@@ -3,7 +3,7 @@ GEM
   specs:
     bigdecimal (3.1.9)
     diff-lcs (1.5.1)
-    dotenv (3.1.4)
+    dotenv (3.1.7)
     ffi (1.15.5)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
