@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  catalog:
+    build: ./apps/catalog
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./apps/catalog:/app
+      - ./shared:/app/shared
+    environment:
+      - CATALOG_DRB_URI=druby://127.0.0.1:9001
+      - DATABASE_URL=sqlite:///shared/catalog_dev.db
+
+  crawler:
+    build: ./apps/crawler
+    ports:
+      - "9002:9002"
+    volumes:
+      - ./apps/crawler:/app
+      - ./shared:/app/shared
+    environment:
+      - CRAWLER_DRB_URI=druby://127.0.0.1:9002
+      - DATABASE_URL=sqlite:///shared/crawler_dev.db
+
+  tg_bot:
+    build: ./apps/tg_bot
+    ports:
+      - "9003:9003"
+    volumes:
+      - ./apps/tg_bot:/app
+      - ./shared:/app/shared
+    environment:
+      - TG_BOT_DRB_URI=druby://127.0.0.1:9003
+      - DATABASE_URL=sqlite:///shared/tg_bot_dev.db
+      - TELEGRAM_TOKEN=your_telegram_token
+      - ROLLBAR_TOKEN=your_rollbar_token
