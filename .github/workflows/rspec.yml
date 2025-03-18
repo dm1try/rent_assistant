@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [catalog, crawler, tg_bot]
+        app: [catalog, crawler, tg_bot, web_chat, web_search]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
