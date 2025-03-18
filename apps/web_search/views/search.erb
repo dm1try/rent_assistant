@@ -1,0 +1,36 @@
+<%= erb :layout do %>
+  <div class="container">
+    <h1>Web Search</h1>
+    <div id="filters">
+      <form action="/search/<%= search.id %>/update_filters" method="post">
+        <label for="city">City:</label>
+        <select name="city" id="city">
+          <option value="warszawa">Warszawa</option>
+          <option value="krakow">Kraków</option>
+          <option value="wroclaw">Wrocław</option>
+          <option value="gdansk">Gdańsk</option>
+        </select>
+        <label for="min_price">Min Price:</label>
+        <input type="number" name="min_price" id="min_price">
+        <label for="max_price">Max Price:</label>
+        <input type="number" name="max_price" id="max_price">
+        <label for="min_area">Min Area:</label>
+        <input type="number" name="min_area" id="min_area">
+        <label for="max_area">Max Area:</label>
+        <input type="number" name="max_area" id="max_area">
+        <label for="address_exclude">Address Exclude:</label>
+        <input type="text" name="address_exclude" id="address_exclude">
+        <button type="submit">Update Filters</button>
+      </form>
+    </div>
+    <div id="listings">
+      <% search.listings.each do |listing| %>
+        <div class="listing">
+          <p><%= listing[:address] %>, <%= listing[:area] %> m2, <%= listing[:price] %> PLN</p>
+          <p><%= listing[:description] %></p>
+          <a href="<%= listing[:url] %>">View Listing</a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

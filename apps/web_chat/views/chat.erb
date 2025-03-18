@@ -1,0 +1,16 @@
+<%= erb :layout do %>
+  <div class="container">
+    <h1>Web Chat</h1>
+    <div id="messages">
+      <% chat.messages.each do |message| %>
+        <div class="message">
+          <p><%= message.content %></p>
+        </div>
+      <% end %>
+    </div>
+    <form action="/chat/<%= chat.id %>/send_message" method="post">
+      <input type="text" name="message" placeholder="Type your message...">
+      <button type="submit">Send</button>
+    </form>
+  </div>
+<% end %>
