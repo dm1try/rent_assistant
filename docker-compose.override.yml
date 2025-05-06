@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  catalog:
+    volumes:
+      - ./lib:/app/lib
+
+  crawler:
+    volumes:
+      - ./lib:/app/lib
+
+  tg_bot:
+    volumes:
+      - ./lib:/app/lib
