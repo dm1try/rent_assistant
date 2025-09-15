@@ -1,8 +1,11 @@
-require 'drb/observer'
+require 'redis'
 require 'json'
 
 class CatalogService
-  include DRb::DRbObservable
+
+  def initialize
+    @redis = Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0')
+  end
 
   def save_listing(attributes)
     db_attributes = attributes.dup
@@ -13,8 +16,10 @@ class CatalogService
     db_attributes[:images] = JSON.dump(attributes[:images]) if attributes[:images]
 
     listing_id = DB[:listings].insert(db_attributes)
-    changed
-    notify_observers(:new_listing, listing_id, attributes)
+    @redis.xadd('catalog_listing_stream', {
+      listing_id: listing_id,
+      attributes: JSON.dump(attributes)
+    })
     listing_id
   rescue => e
     $logger&.error "Could not save listing: #{e}"
