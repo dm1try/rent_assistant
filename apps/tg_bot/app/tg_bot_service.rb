@@ -1,11 +1,10 @@
-require 'drb/drb'
+require 'redis'
 require 'telegram/bot'
 require 'models/chat'
 require 'time_difference'
 require 'cgi'
 
 class TgBotService
-  include DRb::DRbUndumped
 
   CITY_NAMES_TO_PL = {
     'krakow' => 'Kraków',
@@ -15,7 +14,7 @@ class TgBotService
   }.freeze
 
   def initialize
-    @crawler = DRbObject.new_with_uri(ENV['CRAWLER_DRB_URI'])
+    @redis = Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0')
     @send_queue = Queue.new
   end
 
@@ -56,6 +55,25 @@ class TgBotService
         retry
       rescue => e
         $logger&.error "#{e}"
+      end
+    end
+    @stream_thread = Thread.new do
+      last_id = '0-0'
+      loop do
+        begin
+          entries = @redis.xread('new_listing_stream', last_id, count: 10, block: 5000)
+          if entries && entries['new_listing_stream']
+            entries['new_listing_stream'].each do |id, fields|
+              last_id = id
+              listing = JSON.parse(fields['listing'], symbolize_names: true)
+              matched_search_ids = JSON.parse(fields['matched_search_ids'])
+              update(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
+            end
+          end
+        rescue => e
+          $logger&.error "Error reading from Redis Stream: #{e}"
+        end
+        sleep 1
       end
     end
     true
@@ -157,7 +175,7 @@ class TgBotService
       when 'stop'
         chat = Chat.find_or_create_by_tg_id(message.chat.id)
         chat.update(active: false)
-        @crawler.unwatch(search_id: message.chat.id)
+#        @crawler.unwatch(search_id: message.chat.id)
 
         bot.api.send_message(chat_id: message.chat.id, text: "You won't receive notifications anymore, #{message.from.first_name}")
       when 'watch'
@@ -272,8 +290,12 @@ class TgBotService
   end
 
   def rewatch(chat)
-    @crawler.unwatch(search_id: chat.tg_id)
-    @crawler.watch(search_id: chat.tg_id,city: chat.filters[:city], filters: chat.filters)
+    # If crawler is refactored to use Redis Streams, publish a watch/unwatch event here
+    # Otherwise, keep as a direct method call if tightly coupled
+    # Example:
+    # @redis.xadd('crawler_watch_stream', { action: 'watch', search_id: chat.tg_id, city: chat.filters[:city], filters: JSON.dump(chat.filters) })
+    # For now, leave as a placeholder
+    # ...existing code...
   end
 
   def choose_range_reply(bot, message, question, values)

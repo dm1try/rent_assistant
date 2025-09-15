@@ -67,13 +67,10 @@ describe TgBotService do
     end
 
     context 'when command is /stop' do
-      let(:crawler) { double('crawler') }
       let(:tg_chat) { Chat.create(tg_id: 1, active: true, filters: JSON.dump({})) }
 
       before do
         allow(chat).to receive(:id).and_return(1)
-        subject.instance_variable_set(:@crawler, crawler)
-        allow(crawler).to receive(:unwatch)
         allow(message).to receive(:text).and_return('/stop')
       end
 
