@@ -27,7 +27,7 @@ class CatalogService
   end
 
   def get_listings
-    DB[:listings].map do |listing|
+    DB[:listings].limit(10).map do |listing|
       listing[:location] = JSON.parse(listing[:location])
       listing[:images] = JSON.parse(listing[:images]) if listing[:images]
       listing[:source] = JSON.parse(listing[:source]) if listing[:source]
