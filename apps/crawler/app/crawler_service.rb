@@ -1,11 +1,13 @@
 require 'redis'
 require 'search'
 require 'parser_factory'
+require_relative 'catalog'
+
 class CrawlerService
 
   def initialize
     @redis = Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0')
-#    @catalog = CatalogService.new # Replace with actual catalog service initialization if needed
+    @catalog = Catalog.new
   end
 
   def watch(search_id:, city:, filters: {})
