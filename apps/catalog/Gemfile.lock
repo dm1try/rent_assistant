@@ -28,8 +28,8 @@ GEM
     rspec-support (3.13.1)
     sequel (5.92.0)
       bigdecimal
-    sqlite3 (1.7.3-x86_64-darwin)
-    sqlite3 (1.7.3-x86_64-linux)
+    sqlite3 (2.7.4-x86_64-darwin)
+    sqlite3 (2.7.4-x86_64-linux-gnu)
 
 PLATFORMS
   x86_64-darwin-22
