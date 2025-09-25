@@ -1,14 +1,13 @@
-require 'drb/drb'
+require 'redis'
 require 'search'
 require 'parser_factory'
-require 'drb/observer'
+require_relative 'catalog'
+
 class CrawlerService
-  include DRb::DRbObservable
 
   def initialize
-    @catalog = DRbObject.new_with_uri(ENV['CATALOG_DRB_URI'])
-  rescue DRb::DRbConnError => e
-    $logger&.warn "Could not connect to catalog service: #{e}"
+    @redis = Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0')
+    @catalog = Catalog.new
   end
 
   def watch(search_id:, city:, filters: {})
@@ -43,8 +42,10 @@ class CrawlerService
           matched_search_ids = Search.percolate(listing)
           $logger&.info "percolated listing #{listing[:url]} to #{matched_search_ids.count} searches}"
           if matched_search_ids.any?
-            changed
-            notify_observers(:new_listing, {listing: listing, matched_search_ids: matched_search_ids})
+            @redis.xadd('new_listing_stream', {
+              listing: JSON.dump(listing),
+              matched_search_ids: JSON.dump(matched_search_ids)
+            })
           end
         end
       end

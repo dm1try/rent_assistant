@@ -20,4 +20,6 @@ gem "time_difference", "~> 0.7.0"
 
 gem "bigdecimal", "~> 3.1"
 
+gem "redis", "~> 5.4"
+
 gem 'rollbar'

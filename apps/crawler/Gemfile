@@ -25,3 +25,5 @@ gem "dotenv", "~> 3.0"
 gem "rollbar", "~> 3.4"
 
 gem "retryable", "~> 3.0"
+
+gem "redis", "~> 5.4"

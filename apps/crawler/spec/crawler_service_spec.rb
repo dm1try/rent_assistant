@@ -45,14 +45,19 @@ RSpec.describe CrawlerService do
       crawler_service.instance_variable_set(:@catalog, catalog)
     end
 
-    it 'parses index' do
+    it 'parses index and publishes to Redis Stream' do
       expect(parser).to receive(:parse_index).and_return([listing])
       expect(catalog).to receive(:listing_exists?).with('https://example.com').and_return(false)
       expect(parser).to receive(:parse_listing).with(listing).and_return(listing)
       expect(catalog).to receive(:save_listing).with(listing)
       expect(Search).to receive(:percolate).with(listing).and_return([1])
-      expect(crawler_service).to receive(:changed)
-      expect(crawler_service).to receive(:notify_observers).with(:new_listing, {listing: listing, matched_search_ids: [1]})
+
+      redis = double('redis')
+      crawler_service.instance_variable_set(:@redis, redis)
+      expect(redis).to receive(:xadd).with('new_listing_stream', {
+        listing: JSON.dump(listing),
+        matched_search_ids: JSON.dump([1])
+      })
 
       crawler_service.crawl
     end
@@ -63,8 +68,9 @@ RSpec.describe CrawlerService do
       expect(parser).not_to receive(:parse_listing).with(listing)
       expect(catalog).not_to receive(:save_listing).with(listing)
       expect(Search).not_to receive(:percolate).with(listing)
-      expect(crawler_service).not_to receive(:changed)
-      expect(crawler_service).not_to receive(:notify_observers).with(:new_listing, {listing: listing, matched_search_ids: [1]})
+      redis = double('redis')
+      crawler_service.instance_variable_set(:@redis, redis)
+      expect(redis).not_to receive(:xadd)
 
       crawler_service.crawl
     end
