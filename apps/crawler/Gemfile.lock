@@ -49,8 +49,8 @@ GEM
     rspec-support (3.13.6)
     sequel (5.96.0)
       bigdecimal
-    sqlite3 (1.7.3-x86_64-darwin)
-    sqlite3 (1.7.3-x86_64-linux)
+    sqlite3 (2.7.4-x86_64-darwin)
+    sqlite3 (2.7.4-x86_64-linux-gnu)
     vcr (6.3.1)
       base64
     webmock (3.25.1)
