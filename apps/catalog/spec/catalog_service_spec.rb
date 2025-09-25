@@ -1,8 +1,15 @@
 require "spec_helper"
 require 'catalog_service'
 
+
 RSpec.describe CatalogService do
+  let(:redis_double) { instance_double('Redis', xadd: true) }
   let(:catalog_service) { CatalogService.new }
+
+  before do
+    allow(Redis).to receive(:new).and_return(redis_double)
+    catalog_service.instance_variable_set(:@redis, redis_double)
+  end
 
   it "works" do
     expect(catalog_service.get_listings.count).to eq(0)
@@ -51,9 +58,7 @@ RSpec.describe CatalogService do
       }
     end
     it "publishes new listing to Redis Stream" do
-      redis = double('redis')
-      catalog_service.instance_variable_set(:@redis, redis)
-      expect(redis).to receive(:xadd).with('catalog_listing_stream', {
+      expect(redis_double).to receive(:xadd).with('catalog_listing_stream', {
         listing_id: kind_of(Integer),
         attributes: JSON.dump(listing_attributes)
       })
