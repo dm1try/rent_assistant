@@ -175,7 +175,6 @@ class TgBotService
       when 'stop'
         chat = Chat.find_or_create_by_tg_id(message.chat.id)
         chat.update(active: false)
-#        @crawler.unwatch(search_id: message.chat.id)
 
         bot.api.send_message(chat_id: message.chat.id, text: "You won't receive notifications anymore, #{message.from.first_name}")
       when 'watch'
@@ -290,12 +289,7 @@ class TgBotService
   end
 
   def rewatch(chat)
-    # If crawler is refactored to use Redis Streams, publish a watch/unwatch event here
-    # Otherwise, keep as a direct method call if tightly coupled
-    # Example:
-    # @redis.xadd('crawler_watch_stream', { action: 'watch', search_id: chat.tg_id, city: chat.filters[:city], filters: JSON.dump(chat.filters) })
-    # For now, leave as a placeholder
-    # ...existing code...
+    # rewatch logic will be reimplemnted in catalog service
   end
 
   def choose_range_reply(bot, message, question, values)
