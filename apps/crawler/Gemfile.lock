@@ -33,7 +33,7 @@ GEM
       listen (~> 3.0)
     retryable (3.0.5)
     rexml (3.4.1)
-    rollbar (3.6.2)
+    rollbar (3.8.0)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
