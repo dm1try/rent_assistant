@@ -4,7 +4,7 @@ GEM
     bigdecimal (3.2.3)
     connection_pool (2.5.4)
     diff-lcs (1.5.1)
-    dotenv (3.1.8)
+    dotenv (3.2.0)
     ffi (1.15.5)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
